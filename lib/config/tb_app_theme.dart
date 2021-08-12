@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_library/config/tb_app_colors.dart';
-import 'package:flutter_library/config/tb_system_config.dart';
-import 'package:flutter_library/util/size_util.dart';
+part of flutter_library;
+
 
 class TbAppTheme {
   static init() {

@@ -1,4 +1,4 @@
-
+part of flutter_library;
 class RegexConfig {
 
   factory RegexConfig()=> _getInstance();

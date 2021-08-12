@@ -1,9 +1,4 @@
-
-import 'package:dio/dio.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:flutter_library/base/tb_base_view_state.dart';
-import 'package:flutter_library/http/quest_list_info.dart';
-import 'package:flutter_library/http/tb_http_utils.dart';
+part of flutter_library;
 
 abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   bool mIsShowLoading = true;

@@ -1,8 +1,6 @@
+part of flutter_library;
 
 
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 
 class TbSystemConfig {
   factory TbSystemConfig() => _getInstance();

@@ -1,5 +1,5 @@
+part of flutter_library;
 
-import 'dart:ui';
 
 class AppColors {
   static const Color color_1F2B42 =Color(0xff1F2B42);

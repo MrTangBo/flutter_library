@@ -1,7 +1,4 @@
-
-
-import 'package:flutter/foundation.dart';
-
+part of flutter_library;
 log(String str) {
   if(kDebugMode){
     print("$str");

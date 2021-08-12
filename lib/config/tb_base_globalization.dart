@@ -1,7 +1,5 @@
-
+part of flutter_library;
 /*国际化配置*/
-import 'package:get/get_navigation/src/root/internacionalization.dart';
-
 class TbBaseGlobalization extends Translations {
   Map<String, Map<String, String>> defaultMap = {
     'zh_CN': {

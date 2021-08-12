@@ -1,6 +1,5 @@
-
+part of flutter_library;
 /*并行请求参数配置*/
-import 'package:dio/dio.dart';
 
 class QuestListInfo {
   QuestMethod? questMethod;

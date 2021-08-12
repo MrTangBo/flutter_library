@@ -1,5 +1,4 @@
-
-import 'package:flutter_library/http/tb_http_utils.dart';
+part of flutter_library;
 class TbHttpResult<T> {
   dynamic code;
   T? data;

@@ -1,28 +1,61 @@
+library flutter_library;
 
+import 'dart:convert';
+import 'dart:io';
+import 'dart:ui';
 
-export 'package:connectivity_plus/connectivity_plus.dart';
-export 'package:dio/adapter.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/internacionalization.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+
+/*export*/
 export 'package:dio/dio.dart';
+export 'package:get/get.dart' hide Response, MultipartFile, FormData;
+export 'package:flutter_easyrefresh/easy_refresh.dart';
+export 'package:shared_preferences/shared_preferences.dart';
+export 'package:connectivity_plus/connectivity_plus.dart';
+export 'package:flutter_easyloading/flutter_easyloading.dart';
+export 'package:fluttertoast/fluttertoast.dart';
+export 'package:date_format/date_format.dart';
+export 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+export 'package:octo_image/octo_image.dart';
+export 'package:image_picker/image_picker.dart';
+export 'package:fijkplayer/fijkplayer.dart';
+export 'package:wakelock/wakelock.dart';
 
 /*base*/
-export 'base/tb_base_logic.dart';
-export 'base/tb_base_view_state.dart';
-export 'base/tb_base_widget_state.dart';
+part './base/tb_base_logic.dart';
+
+part './base/tb_base_view_state.dart';
+
+part './base/tb_base_widget_state.dart';
 /*config*/
-export 'config/tb_app_colors.dart';
-export 'config/tb_app_theme.dart';
-export 'config/tb_base_globalization.dart';
-export 'config/tb_system_config.dart';
+part './config/tb_app_colors.dart';
+
+part './config/tb_app_theme.dart';
+
+part './config/tb_base_globalization.dart';
+
+part './config/tb_system_config.dart';
 /*http*/
-export 'http/quest_list_info.dart';
-export 'http/quest_repeat_list_info.dart';
-export 'http/tb_event_code_handle.dart';
-export 'http/tb_http_result.dart';
-export 'http/tb_http_utils.dart';
+part './http/quest_list_info.dart';
+
+part './http/quest_repeat_list_info.dart';
+
+part './http/tb_http_result.dart';
+
+part './http/tb_http_utils.dart';
 /*util*/
-export 'util/regex_config.dart';
-export 'util/size_util.dart';
-export 'util/tb_log_utils.dart';
+part './util/regex_config.dart';
 
+part './util/size_util.dart';
 
-
+part './util/tb_log_utils.dart';

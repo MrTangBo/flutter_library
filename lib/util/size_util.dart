@@ -1,6 +1,6 @@
 
+part of flutter_library;
 
-import 'dart:ui';
 
 class SizeUtil {
   // 1.基本信息

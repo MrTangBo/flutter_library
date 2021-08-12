@@ -1,9 +1,5 @@
-
+part of flutter_library;
 /*回复网络请求参数配置*/
-import 'package:dio/dio.dart';
-import 'package:flutter_library/http/quest_list_info.dart';
-import 'package:flutter_library/http/tb_http_utils.dart';
-
 class QuestRepeatListInfo {
   QuestMethod? questMethod;
   dynamic data;

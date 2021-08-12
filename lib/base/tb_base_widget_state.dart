@@ -1,16 +1,4 @@
-
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:flutter_library/base/tb_base_logic.dart';
-import 'package:flutter_library/base/tb_base_view_state.dart';
-import 'package:flutter_library/config/tb_app_theme.dart';
-import 'package:flutter_library/config/tb_system_config.dart';
-import 'package:flutter_library/http/tb_http_utils.dart';
-
+part of flutter_library;
 /*state基类*/
 abstract class TbBaseWidgetState<T extends TbBaseLogic,
         E extends TbBaseViewState, S extends StatefulWidget> extends State<S>
