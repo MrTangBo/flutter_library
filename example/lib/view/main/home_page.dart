@@ -34,7 +34,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage> {
+class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>with SingleTickerProviderStateMixin {
   TabController? tabController;
   List<Text> tabList = [];
 

@@ -69,10 +69,14 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   questMix(List<QuestListInfo> questInfos,
       {QuestSuccess? onSuccess,
       QuestFailed? onFiled,
-      QuestError? onError}) async {
+      QuestError? onError,bool updateAll =true}) async {
     TbHttpUtils.instance.questMix(questInfos, onSuccess: (result, taskId) {
       resultData(result, taskId);
-      update();
+      if(updateAll){
+        update();
+      }else{
+        update([taskId]);
+      }
     },
         onFiled: failedHandle,
         onError: errorHandle,

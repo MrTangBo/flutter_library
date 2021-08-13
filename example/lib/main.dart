@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TbHttpUtils.instance
-      ..mBaseUrl = "http://161.117.234.84:18080"
+      ..mBaseUrl = "https://kylinba.ejar.cn"
       ..mErrorCodeHandle = (code, msg, taskId) {
         //统一处理各种ErrorCode
       }

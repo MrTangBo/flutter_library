@@ -191,9 +191,9 @@ packages:
   flutter_library:
     dependency: "direct main"
     description:
-      name: flutter_library
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: ".."
+      relative: true
+    source: path
     version: "0.0.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive

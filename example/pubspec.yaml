@@ -23,9 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-#  flutter_library:
-#    path: ../
-  flutter_library: ^0.0.2
+  flutter_library:
+    path: ../
+#  flutter_library: ^0.0.2
 
 
   # The following adds the Cupertino Icons font to your application.

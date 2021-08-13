@@ -1,14 +1,11 @@
 part of flutter_library;
+
 /*state基类*/
 abstract class TbBaseWidgetState<T extends TbBaseLogic,
         E extends TbBaseViewState, S extends StatefulWidget> extends State<S>
-    with
-        AutomaticKeepAliveClientMixin,
-        TickerProviderStateMixin,
-        WidgetsBindingObserver,
-        RouteAware {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
   T? mLogic;
-   E? mState;
+  E? mState;
   String? mLogicTag;
   int lastPopTime = 0;
 
