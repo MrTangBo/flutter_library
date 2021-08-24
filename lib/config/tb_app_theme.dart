@@ -14,6 +14,7 @@ class TbAppTheme {
       bodyText2: TextStyle(color: AppColors.color_2c355c, fontSize: 13.px),
     ),
     appBarTheme: AppBarTheme(
+      centerTitle: true,
       elevation: 0,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

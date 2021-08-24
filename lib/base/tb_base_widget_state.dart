@@ -4,6 +4,7 @@ part of flutter_library;
 abstract class TbBaseWidgetState<T extends TbBaseLogic,
         E extends TbBaseViewState, S extends StatefulWidget> extends State<S>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
+
   T? mLogic;
   E? mState;
   String? mLogicTag;
@@ -11,10 +12,19 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
 
   final bool mShowExitTips = false;
 
+  bool _mBuildComplete = false;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this); //添加观察者
+    WidgetsBinding.instance
+      ?..addObserver(this) //添加观察者
+      ..addPostFrameCallback((timeStamp) {
+        if (!_mBuildComplete) {
+          firstFrameComplete();
+          _mBuildComplete = true;
+        }
+      });
     initView();
   }
 
@@ -78,15 +88,11 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
 
   initView() {
     initViewState();
-    initStatusBar();
     initInternetStatus();
   }
 
-  initStatusBar() {
-    TbAppTheme.setSystemUi(
-        isImmersed: false,
-        statusColor: TbSystemConfig.instance.mStatusBarColor,
-        navigationColor: TbSystemConfig.instance.mNavigationColor);
+  void firstFrameComplete() {
+    //第一帧渲染完成监听
   }
 
   initInternetStatus() {
@@ -157,8 +163,7 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
 
   @override
   void didChangeDependencies() {
-    TbSystemConfig.instance.routeObserver
-        .subscribe(this, ModalRoute.of(context)!); //订阅
+    TbSystemConfig.instance.routeObserver.subscribe(this, ModalRoute.of(context)!); //订阅
     super.didChangeDependencies();
   }
 
