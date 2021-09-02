@@ -3,7 +3,7 @@ part of flutter_library;
 abstract class TbBaseViewState {
   QuestStatus mQuestStatus = QuestStatus.ok;
 
-  EasyRefreshController mRefreshController = EasyRefreshController();
+  late EasyRefreshController mRefreshController;
 
   void dispose() {
     mRefreshController.dispose();

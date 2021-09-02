@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       }
       ..init();
 
+
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle

@@ -97,9 +97,13 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   }
 
   void initInternetStatus() {
+    mState?.mRefreshController =EasyRefreshController();
     Connectivity().checkConnectivity().then((value) {
       //获取当前的网络
       _mNetWorkStatus = value;
+      if(value==ConnectivityResult.none){
+        mState?.mRefreshController =EasyRefreshController();
+      }
     });
     TbHttpUtils.instance
       ..mNetWorkHandle = (status) {
