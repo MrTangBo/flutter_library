@@ -7,7 +7,7 @@ class QuestRepeatListInfo {
   String? url;
   Options? options;
   int? taskId;
-
+  String? taskIdMix ;
   QuestSuccess? onSuccess;
   QuestFailed? onFiled;
   QuestError? onError;
@@ -24,12 +24,15 @@ class QuestRepeatListInfo {
       this.queryParameters,
       this.options,
       this.taskId,
+      this.taskIdMix,
       this.onSuccess,
       this.onFiled,
       this.onError,
       this.onMultipleSuccess,
       this.questListInfos,
       this.onMultipleFiled});
+
+
 }
 
 

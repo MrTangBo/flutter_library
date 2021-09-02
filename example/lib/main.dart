@@ -10,7 +10,9 @@ import 'view/splash/SplashAct.dart';
 
 import 'package:flutter_library/flutter_library.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -21,17 +23,17 @@ class MyApp extends StatelessWidget {
         //统一处理各种ErrorCode
       }
       ..init();
-    TbAppTheme.init();
+
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom
       ..loadingStyle = EasyLoadingStyle.custom
-      ..indicatorSize = 50.0
-      ..radius = 10.0
+      ..indicatorSize = 50.px
+      ..radius = 10.px
       ..fontSize = 15.px
       ..progressColor = Colors.white
-      ..backgroundColor = Color(0x70000000)
+      ..backgroundColor = Color(0x80000000)
       ..indicatorColor = Colors.white
       ..textColor = Colors.white
       ..maskColor = Color(0x00000000)
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
         );
       }),
       navigatorObservers: [TbSystemConfig.instance.routeObserver],
+      navigatorKey: TbSystemConfig.instance.navigatorKey,
     );
   }
 }

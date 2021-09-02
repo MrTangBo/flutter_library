@@ -1,4 +1,5 @@
 part of flutter_library;
+
 typedef QuestSuccess = Function(dynamic result, int taskId);
 typedef QuestError = Function(dynamic onError);
 typedef QuestFailed = Function(dynamic code, dynamic msg, int taskId);
@@ -34,20 +35,18 @@ class TbHttpUtils {
   Map<String, dynamic> mHeader = {};
   List<Interceptor> mInterceptors = []; //自定义拦截器
   Function mLoadingView = () {
-    EasyLoading.show(status: "正在加载..", maskType: EasyLoadingMaskType.custom);
+    EasyLoading.show(
+        status: "loading".tr, maskType: EasyLoadingMaskType.custom);
   }; //加载进度框
   Transformer mTransformer = DefaultTransformer(); // 自定义 jsonDecodeCallback
 
-  ConnectivityResult _mNetWorkStatus = ConnectivityResult.none; //当前网络状态
-  Function(ConnectivityResult mNetWorkStatus) mNetWorkHandle =
+  ConnectivityResult? _mNetWorkStatus; //当前网络状态
+
+  Function(ConnectivityResult? mNetWorkStatus) mNetWorkHandle =
       (_) {}; //不同网络状态处理
   bool mFirstIntoApp = true; //是否首次进去app(防止进去App去执行无网络的操作，正常情况应该发起请求时执行)
 
-  Map<String, List<QuestRepeatListInfo>> mRepeatQuestMap = {};
-
   List<QuestRepeatListInfo> mRepeatQuests = []; //断线重连配置
-
-  bool _isLogQuest = false; //是否已经打印了日志
 
   bool mShowErrorMsg = true; //是否展示请求超时的或者请求错误弹窗提示;
 
@@ -74,14 +73,11 @@ class TbHttpUtils {
                 options.baseUrl = mBaseMultiUrl[key];
               }
             });
-            if (!_isLogQuest) {
-              if (kDebugMode) {
-                //debug模式允许打印
-                log("realUrl-->${options.baseUrl + options.path}\nqueryParameters-->${jsonEncode(options.queryParameters)}\nformData-->${jsonEncode(options.data)}\nheader-->${options.headers}");
-              }
-              _isLogQuest = true;
+            if (kDebugMode) {
+              //debug模式允许打印
+              log("realUrl-->${options.baseUrl + options.path}\nqueryParameters-->${jsonEncode(options.queryParameters)}\nformData-->${jsonEncode(options.data)}\nheader-->${options.headers}");
             }
-            handler.next(options);
+            return handler.next(options);
           },
         ),
       );
@@ -102,39 +98,44 @@ class TbHttpUtils {
     };
 
     /*检测网络*/
-    Connectivity().onConnectivityChanged.listen((result) {
-      if (_mNetWorkStatus == result) return;
-      _mNetWorkStatus = result;
-      if (!mFirstIntoApp) {
-        mNetWorkHandle(_mNetWorkStatus);
-        mFirstIntoApp = false;
-      }
-      if (_mNetWorkStatus != ConnectivityResult.none) {
-        mRepeatQuests.forEach((quest) {
-          if (quest.questMethod == QuestMethod.post) {
-            post(quest.url!, quest.taskId!,
-                data: quest.data,
-                queryParameters: quest.queryParameters,
-                options: quest.options,
-                onSuccess: quest.onSuccess,
-                onFiled: quest.onFiled,
-                onError: quest.onError);
-          } else if (quest.questMethod == QuestMethod.get) {
-            get(quest.url!, quest.taskId!,
-                queryParameters: quest.queryParameters,
-                options: quest.options,
-                onSuccess: quest.onSuccess,
-                onFiled: quest.onFiled,
-                onError: quest.onError);
-          } else {
-            questMix(quest.questListInfos!,
-                onSuccess: quest.onMultipleSuccess,
-                onFiled: quest.onMultipleFiled,
-                onError: quest.onError);
-          }
-        });
-      }
-    });
+    Connectivity()
+      ..onConnectivityChanged.listen((result) {
+        if (_mNetWorkStatus == result) return;
+        _mNetWorkStatus = result;
+        if (!mFirstIntoApp) {
+          mNetWorkHandle(result);
+          mFirstIntoApp = false;
+        }
+        if (_mNetWorkStatus != ConnectivityResult.none) {
+          mRepeatQuests.forEach((quest) {
+            if (quest.questMethod == QuestMethod.post) {
+              post(quest.url!, quest.taskId!,
+                  data: quest.data,
+                  queryParameters: quest.queryParameters,
+                  options: quest.options,
+                  onSuccess: quest.onSuccess,
+                  onFiled: quest.onFiled,
+                  onError: quest.onError);
+            } else if (quest.questMethod == QuestMethod.get) {
+              get(quest.url!, quest.taskId!,
+                  queryParameters: quest.queryParameters,
+                  options: quest.options,
+                  onSuccess: quest.onSuccess,
+                  onFiled: quest.onFiled,
+                  onError: quest.onError);
+            } else {
+              questMix(quest.questListInfos!,
+                  onSuccess: quest.onMultipleSuccess,
+                  onFiled: quest.onMultipleFiled,
+                  onError: quest.onError);
+            }
+          });
+        }
+      })
+      ..checkConnectivity().then((value) {
+        //获取当前的网络
+        _mNetWorkStatus = value;
+      });
   }
 
 /*单get请求*/
@@ -148,6 +149,8 @@ class TbHttpUtils {
     /*无网络不请求*/
     mFirstIntoApp = false;
     if (_mNetWorkStatus == ConnectivityResult.none) {
+      if (mRepeatQuests.where((element) => element.taskId == taskId).length !=
+          0) return;
       mRepeatQuests.add(QuestRepeatListInfo(
           url: url,
           questMethod: QuestMethod.get,
@@ -167,15 +170,13 @@ class TbHttpUtils {
           queryParameters: queryParameters,
           options: options,
           cancelToken: token);
-      _isLogQuest = false;
-      mRepeatQuests.clear();
+      mRepeatQuests.removeWhere((element) => taskId == element.taskId);
       if (isShowLoading) {
         EasyLoading.dismiss();
       }
       final info = TbHttpResult.fromJson(jsonDecode(result.toString()));
       if (kDebugMode) {
-        log("result-->$result");
-        log("body-->${jsonEncode(info.data)}");
+        log("result-$taskId-->$result");
       }
       if (onSuccess != null) {
         if (info.code == mSuccessCode) {
@@ -206,6 +207,8 @@ class TbHttpUtils {
     mFirstIntoApp = false;
     /*无网络不请求*/
     if (_mNetWorkStatus == ConnectivityResult.none) {
+      if (mRepeatQuests.where((element) => element.taskId == taskId).length !=
+          0) return;
       mRepeatQuests.add(QuestRepeatListInfo(
           url: url,
           questMethod: QuestMethod.post,
@@ -230,12 +233,10 @@ class TbHttpUtils {
       if (isShowLoading) {
         EasyLoading.dismiss();
       }
-      _isLogQuest = false;
-      mRepeatQuests.clear();
+      mRepeatQuests.removeWhere((element) => taskId == element.taskId);
       final info = TbHttpResult.fromJson(jsonDecode(result.toString()));
       if (kDebugMode) {
-        log("result-->$result");
-        log("body-->${jsonEncode(info.data)}");
+        log("result-$taskId-->$result");
       }
       if (onSuccess != null) {
         if (info.code == mSuccessCode) {
@@ -247,7 +248,7 @@ class TbHttpUtils {
           onFiled(info.code, info.msg, taskId);
         }
       } else {
-        mErrorCodeHandle(info.code, info.msg, -1);
+        mErrorCodeHandle(info.code, info.msg, taskId);
       }
     } on DioError catch (e) {
       _handleError(e, onError, isShowLoading);
@@ -262,12 +263,21 @@ class TbHttpUtils {
       bool isShowLoading = true}) async {
     /*无网络不请求*/
     mFirstIntoApp = false;
+    var mTaskIdMix = "";
+    questInfos.forEach((element) {
+      mTaskIdMix += "${element.taskId}";
+    });
     if (_mNetWorkStatus == ConnectivityResult.none) {
+      if (mRepeatQuests
+              .where((element) => element.taskIdMix == mTaskIdMix)
+              .length !=
+          0) return;
       mRepeatQuests.add(QuestRepeatListInfo(
           questMethod: QuestMethod.mix,
           questListInfos: questInfos,
           onMultipleSuccess: onSuccess,
           onError: onError,
+          taskIdMix: mTaskIdMix,
           onMultipleFiled: onFiled));
       mNetWorkHandle(_mNetWorkStatus);
       return;
@@ -291,16 +301,14 @@ class TbHttpUtils {
         }
       });
       final result = await Future.wait(questList);
-      _isLogQuest = false;
-      mRepeatQuests.clear();
       if (isShowLoading) {
         EasyLoading.dismiss();
       }
+      mRepeatQuests.removeWhere((element) => element.taskIdMix == mTaskIdMix);
       for (int i = 0; i < result.length; i++) {
         final info = TbHttpResult.fromJson(jsonDecode(result[i].toString()));
         if (kDebugMode) {
-          log("result-->$result");
-          log("body-->${jsonEncode(info.data)}");
+          log("result-${questInfos[i].taskId}->${result[i]}");
         }
         if (onSuccess != null) {
           if (info.code == mSuccessCode) {
@@ -326,32 +334,39 @@ class TbHttpUtils {
       case DioErrorType.sendTimeout:
       case DioErrorType.receiveTimeout:
         {
-          Get.snackbar("title_tips".tr, "internet_time_out".tr,
+          Fluttertoast.showToast(
+              msg: "internet_time_out".tr,
               backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              colorText: TbSystemConfig.instance.mSnackbarTextColor);
+              textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
 
       case DioErrorType.response:
         {
-          Get.snackbar("title_tips".tr, "internet_error".tr,
+          Fluttertoast.showToast(
+              msg: "internet_error".tr,
+              toastLength: Toast.LENGTH_LONG,
               backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              colorText: TbSystemConfig.instance.mSnackbarTextColor);
+              textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
 
       case DioErrorType.other:
         {
-          Get.snackbar("title_tips".tr, "internet_unKnow".tr,
+          Fluttertoast.showToast(
+              msg: "internet_unKnow".tr,
+              toastLength: Toast.LENGTH_LONG,
               backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              colorText: TbSystemConfig.instance.mSnackbarTextColor);
+              textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
       default:
         {
-          Get.snackbar("title_tips".tr, "internet_unKnow".tr,
+          Fluttertoast.showToast(
+              msg: "internet_unKnow".tr,
+              toastLength: Toast.LENGTH_LONG,
               backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              colorText: TbSystemConfig.instance.mSnackbarTextColor);
+              textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
     }
@@ -368,7 +383,6 @@ class TbHttpUtils {
     if (isShowLoading) {
       EasyLoading.dismiss();
     }
-    _isLogQuest = false;
     mRepeatQuests.clear();
     if (kDebugMode) {
       log("error-->${e.message}");
@@ -382,5 +396,3 @@ class TbHttpUtils {
     }
   }
 }
-
-

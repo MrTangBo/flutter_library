@@ -16,3 +16,6 @@ class QuestListInfo {
 //mix并行请求，
 enum QuestMethod { post, get, mix }
 
+enum QuestStatus { error, failed ,noInternet,noData,ok}
+
+

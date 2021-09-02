@@ -17,7 +17,9 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   /*下拉刷新*/
   void onRefresh() {
     mPage = 1;
+    _isLoadMore = false;
     mIsShowLoading = false;
+    tbRefreshQuest();
   }
 
   /*上拉加载*/
@@ -25,6 +27,11 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
     mPage++;
     _isLoadMore = true;
     mIsShowLoading = false;
+    tbRefreshQuest();
+  }
+
+  void tbRefreshQuest(){
+
   }
 
   /*post请求*/
@@ -39,11 +46,16 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
         data: data,
         queryParameters: queryParameters,
         options: options, onSuccess: (result, taskId) {
+      if(_isLoadMore){
+        mState?.mRefreshController.finishLoad(success: true);
+      }else{
+        mState?.mRefreshController.finishRefresh(success: true);
+      }
       resultData(result, taskId);
       update();
     },
-        onFiled: failedHandle,
-        onError: errorHandle,
+        onFiled: onFiled ?? failedHandle,
+        onError: onError ?? errorHandle,
         isShowLoading: mIsShowLoading);
   }
 
@@ -57,11 +69,16 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
     TbHttpUtils.instance.get(url, taskId,
         queryParameters: queryParameters,
         options: options, onSuccess: (result, taskId) {
+          if(_isLoadMore){
+            mState?.mRefreshController.finishLoad(success: true);
+          }else{
+            mState?.mRefreshController.finishRefresh(success: true);
+          }
       resultData(result, taskId);
       update();
     },
-        onFiled: failedHandle,
-        onError: errorHandle,
+        onFiled: onFiled ?? failedHandle,
+        onError: onError ?? errorHandle,
         isShowLoading: mIsShowLoading);
   }
 
@@ -69,17 +86,24 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   questMix(List<QuestListInfo> questInfos,
       {QuestSuccess? onSuccess,
       QuestFailed? onFiled,
-      QuestError? onError,bool updateAll =true}) async {
+      QuestError? onError,
+      bool updateAll = true}) async {
     TbHttpUtils.instance.questMix(questInfos, onSuccess: (result, taskId) {
-      resultData(result, taskId);
-      if(updateAll){
-        update();
+      mState?.mQuestStatus = QuestStatus.ok;
+      if(_isLoadMore){
+        mState?.mRefreshController.finishLoad(success: true,noMore: false);
       }else{
+        mState?.mRefreshController.finishRefresh(success: true);
+      }
+      resultData(result, taskId);
+      if (updateAll) {
+        update();
+      } else {
         update([taskId]);
       }
     },
-        onFiled: failedHandle,
-        onError: errorHandle,
+        onFiled: onFiled ?? failedHandle,
+        onError: onError ?? errorHandle,
         isShowLoading: mIsShowLoading);
   }
 
@@ -92,6 +116,13 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
       mPage--;
       _isLoadMore = false;
     }
+    mState?.mQuestStatus = QuestStatus.failed;
+    if(_isLoadMore){
+      mState?.mRefreshController.finishLoad(success: false);
+    }else{
+      mState?.mRefreshController.finishRefresh(success: false);
+    }
+    update([taskId]);
   }
 
   /*处理请求错误*/
@@ -100,5 +131,18 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
       mPage--;
       _isLoadMore = false;
     }
+    mState?.mQuestStatus = QuestStatus.error;
+    if(_isLoadMore){
+      mState?.mRefreshController.finishLoad(success: false);
+    }else{
+      mState?.mRefreshController.finishRefresh(success: false);
+    }
+    update();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mState?.dispose();
   }
 }

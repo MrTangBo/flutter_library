@@ -20,12 +20,24 @@ class HomeLogic extends TbBaseLogic<HomeState> {
       "pageNo": "1"
     };
     var url = "/contentManagement/getBannerByType";
-    questMix([QuestListInfo(url, QuestMethod.post, data: data, taskId: 3)]);
+    questMix([
+      QuestListInfo(url, QuestMethod.post, data: data, taskId: 3),
+      QuestListInfo(url, QuestMethod.post, data: data, taskId: 4)
+    ]);
+
+    post(url, 20, data: data,);
   }
 
   @override
   resultData(result, int taskId) {
     mState?.bannerInfo = BannerInfo.fromJson(result);
+  }
+  
+  @override
+  void tbRefreshQuest() {
+    // TODO: implement tbRefreshQuest
+    super.tbRefreshQuest();
+    getData();
   }
 }
 
@@ -34,7 +46,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>with SingleTickerProviderStateMixin {
+class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>
+    with TickerProviderStateMixin {
   TabController? tabController;
   List<Text> tabList = [];
 
@@ -98,7 +111,7 @@ class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>wi
       child: Column(
         children: [
           ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 // player.start();
                 // var image = await ImagePicker().pickMultiImage(maxHeight: 80);
                 // imageUrls.clear();
@@ -106,21 +119,34 @@ class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>wi
                 //   imageUrls.addAll(image);
                 // });
                 setState(() {
-                  tabList = [
-                    Text(
-                        "${DateTime.parse("2018-02-03").difference(DateTime.parse("2018-02-01")).inMinutes}"),
-                    Text('热点'),
-                    Text('社会'),
-                    Text('娱乐'),
-                    Text('体育'),
-                    Text('美文'),
-                    Text('科技'),
-                    Text('财经'),
-                    Text('时尚')
-                  ];
-                  tabController = TabController(
-                      initialIndex: 1, length: tabList.length, vsync: this);
-                  tabController?.animateTo(0);
+                  // tabList = [
+                  //   Text(
+                  //       "${DateTime.parse("2018-02-03").difference(DateTime.parse("2018-02-01")).inMinutes}"),
+                  //   Text('热点'),
+                  //   Text('社会'),
+                  //   Text('娱乐'),
+                  //   Text('体育'),
+                  //   Text('美文'),
+                  //   Text('科技'),
+                  //   Text('财经'),
+                  //   Text('时尚')
+                  // ];
+                  // tabController = TabController(
+                  //     initialIndex: 1, length: tabList.length, vsync: this);
+                  // tabController?.animateTo(0);
+
+                  showTopSnackBar(
+                      context,
+                      CustomSnackBar.info(
+                        icon: Icon(Icons.sentiment_neutral,
+                            color: const Color(0x15000000), size: 0),
+                        message: "no_internet".tr,
+                        backgroundColor:
+                            TbSystemConfig.instance.mSnackbarBackground,
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: TbSystemConfig.mSnackbarTextSize),
+                      ));
                 });
               },
               child: Text("add")),
@@ -137,7 +163,7 @@ class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>wi
           //
           // ),
           Container(
-            color: new Color(0xfff4f5f6),
+            color: Color(0xfff4f5f6),
             height: 38.0,
             child: TabBar(
               controller: tabController,
@@ -191,55 +217,58 @@ class MyTabBarView extends StatefulWidget {
 class _MyTabBarViewState
     extends TbBaseWidgetState<HomeLogic, HomeState, MyTabBarView> {
   @override
-  void initState() {
-    super.initState();
+  void firstFrameComplete() {
+    // TODO: implement firstFrameComplete
+    super.firstFrameComplete();
     mLogic?.getData();
   }
+  
+  
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget buildWidget(BuildContext context) {
-    return GetBuilder<HomeLogic>(
-      tag: mLogicTag,
-      builder: (logic) {
-        return CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              expandedHeight: 200,
-              stretch: true,
-              flexibleSpace: FlexibleSpaceBar(
-                background: FlutterLogo(),
-                stretchModes: [
-                  StretchMode.zoomBackground,
-                  StretchMode.blurBackground
-                ],
+    return  tbGetBuilder<HomeLogic>(
+        tag: mLogicTag,
+        builder: () {
+          return tbRefreshCustomWidget(logic: mLogic,
+            slivers:[
+              SliverAppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                expandedHeight: 200.px,
+                stretch: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: FlutterLogo(),
+                  stretchModes: [
+                    StretchMode.zoomBackground,
+                    StretchMode.blurBackground
+                  ],
+                ),
               ),
-            ),
-            SliverPersistentHeader(
-              delegate: MyDelegate(),
-              pinned: true,
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return Text(
-                  "${logic.mState?.bannerInfo.list?[0].title}",
-                  style: TextStyle(color: Colors.black87, fontSize: 20),
-                );
-              }, childCount: 30),
-            ),
-            SliverToBoxAdapter(
-              child: Text(
-                "${logic.mState?.bannerInfo.list?[0].title}",
-                style: TextStyle(color: Colors.black87, fontSize: 50),
+              SliverPersistentHeader(
+                delegate: MyDelegate(),
+                pinned: true,
               ),
-            ),
-          ],
-        );
-      },
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return Text(
+                    "${mState?.bannerInfo.list?[0].title}",
+                    style: TextStyle(color: Colors.black87, fontSize: 20),
+                  );
+                }, childCount: 30),
+              ),
+              SliverToBoxAdapter(
+                child: Text(
+                  "${mState?.bannerInfo.list?[0].title}",
+                  style: TextStyle(color: Colors.black87, fontSize: 25.px),
+                ),
+              ),
+            ],
+          );
+        },
     );
   }
 

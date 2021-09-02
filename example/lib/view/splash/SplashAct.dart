@@ -23,7 +23,6 @@ class _TransitPageState extends State<SplashAct> {
   @override
   void initState() {
     super.initState();
-    TbAppTheme.setSystemUi(isImmersed: true);
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (time > 0) {

@@ -4,7 +4,6 @@ part of flutter_library;
 abstract class TbBaseWidgetState<T extends TbBaseLogic,
         E extends TbBaseViewState, S extends StatefulWidget> extends State<S>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
-
   T? mLogic;
   E? mState;
   String? mLogicTag;
@@ -14,9 +13,12 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
 
   bool _mBuildComplete = false;
 
+  ConnectivityResult? _mNetWorkStatus; //当前网络状态
+
   @override
   void initState() {
     super.initState();
+    initView();
     WidgetsBinding.instance
       ?..addObserver(this) //添加观察者
       ..addPostFrameCallback((timeStamp) {
@@ -25,7 +27,6 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
           _mBuildComplete = true;
         }
       });
-    initView();
   }
 
   @override
@@ -78,7 +79,7 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   }
 
   /*必须吃初始化调用setViewState方法*/
-  void initViewState();
+  void initViewState() {}
 
   @protected
   Widget buildWidget(BuildContext context);
@@ -95,17 +96,23 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
     //第一帧渲染完成监听
   }
 
-  initInternetStatus() {
+  void initInternetStatus() {
+    Connectivity().checkConnectivity().then((value) {
+      //获取当前的网络
+      _mNetWorkStatus = value;
+    });
     TbHttpUtils.instance
       ..mNetWorkHandle = (status) {
+        if (_mNetWorkStatus == status) return;
+        _mNetWorkStatus = status;
         if (status == ConnectivityResult.mobile) {
-          Get.snackbar('title_tips'.tr, "internet_mobile".tr,
-              backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              colorText: TbSystemConfig.instance.mSnackbarTextColor);
+          showCustomTopSnackBar("internet_mobile".tr);
         } else if (status == ConnectivityResult.none) {
-          Get.snackbar('title_tips'.tr, "no_internet".tr,
-              backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              colorText: TbSystemConfig.instance.mSnackbarTextColor);
+          showCustomTopSnackBar("no_internet".tr);
+          mState?.mQuestStatus = QuestStatus.noInternet;
+          if (TbHttpUtils.instance.mRepeatQuests.length != 0) {
+            mLogic?.update();
+          }
         }
       };
   }
@@ -163,7 +170,8 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
 
   @override
   void didChangeDependencies() {
-    TbSystemConfig.instance.routeObserver.subscribe(this, ModalRoute.of(context)!); //订阅
+    TbSystemConfig.instance.routeObserver
+        .subscribe(this, ModalRoute.of(context)!); //订阅
     super.didChangeDependencies();
   }
 

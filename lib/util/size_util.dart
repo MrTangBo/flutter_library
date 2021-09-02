@@ -48,20 +48,32 @@ class SizeUtil {
 
 extension IntFit on int {
   double get px {
+    if(SizeUtil.px==0.0){
+      SizeUtil. initialize();
+    }
     return SizeUtil.setPx(this.toDouble());
   }
 
   double get rpx {
+    if(SizeUtil.px==0.0){
+      SizeUtil. initialize();
+    }
     return SizeUtil.setRpx(this.toDouble());
   }
 }
 
 extension DoubleFit on double {
   double get px {
+    if(SizeUtil.px==0.0){
+      SizeUtil. initialize();
+    }
     return SizeUtil.setPx(this);
   }
 
   double get rpx {
+    if(SizeUtil.px==0.0){
+      SizeUtil. initialize();
+    }
     return SizeUtil.setRpx(this);
   }
 }
