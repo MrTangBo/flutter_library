@@ -18,6 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/internacionalization.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -68,6 +69,8 @@ part './util/regex_config.dart';
 part './util/size_util.dart';
 
 part './util/tb_log_utils.dart';
+
+part './util/shared_preferences_utils.dart';
 
 /*extend*/
 part './extend/extend.dart';

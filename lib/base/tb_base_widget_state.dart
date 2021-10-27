@@ -4,6 +4,7 @@ part of flutter_library;
 abstract class TbBaseWidgetState<T extends TbBaseLogic,
         E extends TbBaseViewState, S extends StatefulWidget> extends State<S>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
+
   T? mLogic;
   E? mState;
   String? mLogicTag;
@@ -14,6 +15,8 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   bool _mBuildComplete = false;
 
   ConnectivityResult? _mNetWorkStatus; //当前网络状态
+
+
 
   @override
   void initState() {
@@ -33,12 +36,11 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   Widget build(BuildContext context) {
     super.build(context);
     return WillPopScope(
-      child: Container(
-        child: buildWidget(context),
-      ),
+      child: buildWidget(context),
       onWillPop: !mShowExitTips
           ? null
           : () async {
+              mLogic?.token.cancel();
               if (EasyLoading.isShow) {
                 EasyLoading.dismiss();
                 return false;
@@ -65,7 +67,7 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
     );
   }
 
-  setViewState(T logic, E state, {String? logicTag}) {
+  void setViewState(T logic, E state, {String? logicTag}) {
     this.mLogicTag = logicTag;
     if (logicTag != null) {
       Get.lazyPut<T>(() => logic, tag: logicTag);
@@ -77,6 +79,8 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
     mState = state;
     mLogic?.setViewState(mState);
   }
+
+
 
   /*必须吃初始化调用setViewState方法*/
   void initViewState() {}
@@ -97,12 +101,12 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   }
 
   void initInternetStatus() {
-    mState?.mRefreshController =EasyRefreshController();
+    mState?.mRefreshController = EasyRefreshController();
     Connectivity().checkConnectivity().then((value) {
       //获取当前的网络
       _mNetWorkStatus = value;
-      if(value==ConnectivityResult.none){
-        mState?.mRefreshController =EasyRefreshController();
+      if (value == ConnectivityResult.none) {
+        mState?.mRefreshController = EasyRefreshController();
       }
     });
     TbHttpUtils.instance

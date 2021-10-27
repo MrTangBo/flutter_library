@@ -21,7 +21,7 @@ class TbSystemConfig {
   }
 
   Color mStatusBarColor = Colors.transparent; //顶部状态栏颜色
-  Color mNavigationColor = Colors.black87; //底部状态栏颜色
+  Color mNavigationColor = Colors.transparent; //底部状态栏颜色
   double mStandardSize = 750; //依赖标准尺寸
 
   Color mSnackbarBackground = Color(0x80000000);
@@ -89,8 +89,7 @@ class TbSystemConfig {
         padding: EdgeInsets.only(left: 50.px, right: 50.px));
   };
 
-  /*空布局 空数据 无网络 失败*/
-
+  /*空布局*/
   StatusWidget tbEmptyWidget = () {
     return Container(
       color: Colors.white,
@@ -116,6 +115,7 @@ class TbSystemConfig {
     );
   };
 
+  /*无网络显示*/
   StatusWidget tbNoInternetWidget = () {
     return Container(
       color: Colors.white,
@@ -141,6 +141,7 @@ class TbSystemConfig {
     );
   };
 
+  /*加载失败显示*/
   StatusWidget tbFailedWidget = () {
     return Container(
       color: Colors.white,

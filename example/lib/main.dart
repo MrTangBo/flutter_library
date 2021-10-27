@@ -2,6 +2,7 @@ import 'package:example/view/main/MainAct.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -10,9 +11,12 @@ import 'view/splash/SplashAct.dart';
 
 import 'package:flutter_library/flutter_library.dart';
 
+
 void main() {
   runApp(MyApp());
+ TbAppTheme.setSystemUi();
 }
+
 
 class MyApp extends StatelessWidget {
   @override

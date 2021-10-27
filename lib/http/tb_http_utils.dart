@@ -48,9 +48,9 @@ class TbHttpUtils {
 
   List<QuestRepeatListInfo> mRepeatQuests = []; //断线重连配置
 
-  bool mShowErrorMsg = true; //是否展示请求超时的或者请求错误弹窗提示;
+  bool mShowErrorMsg = kDebugMode; //是否展示请求超时的或者请求错误弹窗提示;(默认debug模式展示)
 
-  QuestFailed mErrorCodeHandle = (_, __, ___) {};
+  QuestFailed mErrorCodeHandle = (_, __, ___) {};//请求失败
 
   init() {
     _mDio
@@ -82,7 +82,7 @@ class TbHttpUtils {
         ),
       );
     //debug模式允许抓包(设置代理)
-    if (kDebugMode) {
+    if (kDebugMode && mPoxyUrl.isNotEmpty) {
       (_mDio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (client) {
         client.findProxy = (uri) {
@@ -145,7 +145,8 @@ class TbHttpUtils {
       QuestSuccess? onSuccess,
       QuestError? onError,
       QuestFailed? onFiled,
-      bool isShowLoading = true}) async {
+      bool isShowLoading = true,
+      CancelToken? token}) async {
     /*无网络不请求*/
     mFirstIntoApp = false;
     if (_mNetWorkStatus == ConnectivityResult.none) {
@@ -164,8 +165,7 @@ class TbHttpUtils {
       return;
     }
     try {
-      CancelToken token = CancelToken();
-      _showLoading(token, isShowLoading);
+      _showLoading(isShowLoading);
       var result = await _mDio.get(url,
           queryParameters: queryParameters,
           options: options,
@@ -203,7 +203,8 @@ class TbHttpUtils {
       QuestSuccess? onSuccess,
       QuestFailed? onFiled,
       QuestError? onError,
-      bool isShowLoading = true}) async {
+      bool isShowLoading = true,
+      CancelToken? token}) async {
     mFirstIntoApp = false;
     /*无网络不请求*/
     if (_mNetWorkStatus == ConnectivityResult.none) {
@@ -223,8 +224,7 @@ class TbHttpUtils {
       return;
     }
     try {
-      CancelToken token = CancelToken();
-      _showLoading(token, isShowLoading);
+      _showLoading(isShowLoading);
       var result = await _mDio.post(url,
           options: options,
           queryParameters: queryParameters,
@@ -282,8 +282,7 @@ class TbHttpUtils {
       mNetWorkHandle(_mNetWorkStatus);
       return;
     }
-    CancelToken token = CancelToken();
-    _showLoading(token, isShowLoading);
+    _showLoading(isShowLoading);
     final List<Future> questList = [];
     try {
       questInfos.forEach((element) {
@@ -292,12 +291,12 @@ class TbHttpUtils {
               options: element.options,
               queryParameters: element.queryParameters,
               data: element.data,
-              cancelToken: token));
+              cancelToken: element.cancelToken));
         } else if (element.questMethod == QuestMethod.get) {
           questList.add(_mDio.get(element.url!,
               queryParameters: element.queryParameters,
               options: element.options,
-              cancelToken: token));
+              cancelToken: element.cancelToken));
         }
       });
       final result = await Future.wait(questList);
@@ -312,15 +311,15 @@ class TbHttpUtils {
         }
         if (onSuccess != null) {
           if (info.code == mSuccessCode) {
-            onSuccess(info.data, questInfos[i].taskId!);
+            onSuccess(info.data, questInfos[i].taskId);
           }
         }
         if (onFiled != null) {
           if (info.code != mSuccessCode) {
-            onFiled(info.code, info.msg, questInfos[i].taskId!);
+            onFiled(info.code, info.msg, questInfos[i].taskId);
           }
         } else {
-          mErrorCodeHandle(info.code, info.msg, questInfos[i].taskId!);
+          mErrorCodeHandle(info.code, info.msg, questInfos[i].taskId);
         }
       }
     } on DioError catch (e) {
@@ -373,7 +372,7 @@ class TbHttpUtils {
   }
 
   /*控制是否显示加载进度框*/
-  _showLoading(CancelToken token, bool isShowLoading) {
+  _showLoading(bool isShowLoading) {
     if (isShowLoading) {
       mLoadingView();
     }

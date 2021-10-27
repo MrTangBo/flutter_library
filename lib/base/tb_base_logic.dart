@@ -8,7 +8,10 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
 
   T? mState;
 
+  bool _isRefresh = false;
   bool _isLoadMore = false;
+
+  CancelToken token = CancelToken();
 
   setViewState(T? state) {
     this.mState = state;
@@ -17,6 +20,7 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   /*下拉刷新*/
   void onRefresh() {
     mPage = 1;
+    _isRefresh = true;
     _isLoadMore = false;
     mIsShowLoading = false;
     tbRefreshQuest();
@@ -25,14 +29,13 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   /*上拉加载*/
   void onLoadMore() {
     mPage++;
+    _isRefresh = false;
     _isLoadMore = true;
     mIsShowLoading = false;
     tbRefreshQuest();
   }
 
-  void tbRefreshQuest(){
-
-  }
+  void tbRefreshQuest() {}
 
   /*post请求*/
   post(String url, int taskId,
@@ -45,10 +48,13 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
     TbHttpUtils.instance.post(url, taskId,
         data: data,
         queryParameters: queryParameters,
+        token: token,
         options: options, onSuccess: (result, taskId) {
-      if(_isLoadMore){
+      mState?.mQuestStatus = QuestStatus.ok;
+      if (_isLoadMore) {
         mState?.mRefreshController.finishLoad(success: true);
-      }else{
+      }
+      if (_isRefresh) {
         mState?.mRefreshController.finishRefresh(success: true);
       }
       resultData(result, taskId);
@@ -68,12 +74,15 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
       QuestFailed? onFiled}) async {
     TbHttpUtils.instance.get(url, taskId,
         queryParameters: queryParameters,
+        token: token,
         options: options, onSuccess: (result, taskId) {
-          if(_isLoadMore){
-            mState?.mRefreshController.finishLoad(success: true);
-          }else{
-            mState?.mRefreshController.finishRefresh(success: true);
-          }
+      mState?.mQuestStatus = QuestStatus.ok;
+      if (_isLoadMore) {
+        mState?.mRefreshController.finishLoad(success: true);
+      }
+      if (_isRefresh) {
+        mState?.mRefreshController.finishRefresh(success: true);
+      }
       resultData(result, taskId);
       update();
     },
@@ -88,11 +97,15 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
       QuestFailed? onFiled,
       QuestError? onError,
       bool updateAll = true}) async {
+    questInfos.forEach((element) {
+      element.cancelToken = token;
+    });
     TbHttpUtils.instance.questMix(questInfos, onSuccess: (result, taskId) {
       mState?.mQuestStatus = QuestStatus.ok;
-      if(_isLoadMore){
-        mState?.mRefreshController.finishLoad(success: true,noMore: false);
-      }else{
+      if (_isLoadMore) {
+        mState?.mRefreshController.finishLoad(success: true);
+      }
+      if (_isRefresh) {
         mState?.mRefreshController.finishRefresh(success: true);
       }
       resultData(result, taskId);
@@ -112,16 +125,18 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
 
   /*处理请求失败*/
   failedHandle(dynamic code, dynamic msg, int taskId) {
+    mState?.mQuestStatus = QuestStatus.failed;
+    if (_isLoadMore) {
+      mState?.mRefreshController.finishLoad(success: true);
+    }
+    if (_isRefresh) {
+      mState?.mRefreshController.finishRefresh(success: true);
+    }
     if (_isLoadMore) {
       mPage--;
-      _isLoadMore = false;
     }
-    mState?.mQuestStatus = QuestStatus.failed;
-    if(_isLoadMore){
-      mState?.mRefreshController.finishLoad(success: false);
-    }else{
-      mState?.mRefreshController.finishRefresh(success: false);
-    }
+    _isLoadMore = false;
+    _isRefresh = false;
     update([taskId]);
   }
 
@@ -129,20 +144,23 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   errorHandle(dynamic error) {
     if (_isLoadMore) {
       mPage--;
-      _isLoadMore = false;
     }
     mState?.mQuestStatus = QuestStatus.error;
-    if(_isLoadMore){
-      mState?.mRefreshController.finishLoad(success: false);
-    }else{
-      mState?.mRefreshController.finishRefresh(success: false);
+    if (_isLoadMore) {
+      mState?.mRefreshController.finishLoad(success: true);
     }
+    if (_isRefresh) {
+      mState?.mRefreshController.finishRefresh(success: true);
+    }
+    _isLoadMore = false;
+    _isRefresh = false;
     update();
   }
 
   @override
   void dispose() {
-    super.dispose();
     mState?.dispose();
+    token.cancel();
+    super.dispose();
   }
 }

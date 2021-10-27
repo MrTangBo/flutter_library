@@ -26,6 +26,7 @@ dependencies:
   wakelock: ^0.5.2
   top_snackbar_flutter: ^1.0.0
   flutter_svg: ^0.22.0
+  cached_network_image: ^3.1.0
 
 
 dev_dependencies:

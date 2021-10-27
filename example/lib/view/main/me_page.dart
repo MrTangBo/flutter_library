@@ -1,5 +1,6 @@
 import 'package:example/view/main/search_order.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_library/flutter_library.dart';
 
 class MePage extends StatefulWidget {
@@ -12,10 +13,23 @@ class MePage extends StatefulWidget {
 class _MePageState extends TbBaseWidgetState {
   @override
   Widget buildWidget(BuildContext context) {
-    return Center(
-      child: ElevatedButton(child: Text("MePage"),onPressed: (){
-        Get.to(()=>SearchOrder());
-      },),
+    return Scaffold(
+      appBar: AppBar(
+        brightness: Brightness.dark,
+        title: Text("dsa"),
+        centerTitle: false,
+        backgroundColor: Colors.blue,
+      ),
+      body: Container(
+        child: Center(
+          child: ElevatedButton(
+            child: Text("MePag1"),
+            onPressed: () {
+              Get.to(() => SearchOrder());
+            },
+          ),
+        ),
+      ),
     );
   }
 }

@@ -7,10 +7,11 @@ class QuestListInfo {
   Map<String, dynamic>? queryParameters;
   String? url;
   Options? options;
-  int? taskId;
+  int taskId;
+  CancelToken? cancelToken;
 
   QuestListInfo(this.url, this.questMethod,
-      {this.data, this.queryParameters, this.options, this.taskId});
+      {this.data, this.queryParameters, this.options, this.taskId =-1,this.cancelToken});
 }
 
 //mix并行请求，
