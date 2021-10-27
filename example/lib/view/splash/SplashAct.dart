@@ -23,13 +23,13 @@ class _TransitPageState extends State<SplashAct> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
         if (time > 0) {
           time--;
         } else {
           Get.offNamed("MainAct");
-          timer.cancel();
+          timer?.cancel();
         }
       });
     });
@@ -73,7 +73,7 @@ class _TransitPageState extends State<SplashAct> {
               child: InkWell(
                 child: _clipButton(),
                 onTap: (){
-                  Get.toNamed("MainAct");
+                  Get.offNamed("MainAct");
                 },
               ),
               right: 10,

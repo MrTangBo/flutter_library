@@ -61,7 +61,7 @@ class _SearchOrderState
             SliverToBoxAdapter(
               child: ElevatedButton(
                   onPressed: () {
-
+                    SharedPreferencesUtils.savePreference<String>( "test", "存了一个值");
                     Get.to(SquarePage());
                   },
 
