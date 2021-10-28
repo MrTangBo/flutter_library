@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:example/constant/api_config.dart';
 import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,13 +20,12 @@ class HomeLogic extends TbBaseLogic<HomeState> {
       "pageSize": "30",
       "pageNo": "1"
     };
-    var url = "/contentManagement/getBannerByType";
     questMix([
-      QuestListInfo(url, QuestMethod.post, data: data, taskId: 3),
-      QuestListInfo(url, QuestMethod.post, data: data, taskId: 4)
+      QuestListInfo(Api.getBannerType.value, QuestMethod.post, data: data, taskId: Api.getBannerType.key),
+      QuestListInfo(Api.getBannerType.value, QuestMethod.post, data: data, taskId: Api.getBannerType.key),
     ]);
 
-    post(url, 20, data: data,);
+    post(Api.getBannerType.value, 20, data: data,);
   }
 
   @override

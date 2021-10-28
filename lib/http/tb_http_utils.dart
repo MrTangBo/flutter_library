@@ -31,7 +31,6 @@ class TbHttpUtils {
   int mConnectTimeout = 15000; // 连接服务器超时时间，单位是毫秒.
   String mPoxyUrl = ""; //代理url
   bool mTrustAllCertificate = true; //信任所有证书
-  Map<String, dynamic> mBaseMultiUrl = {}; //多域名设置
   Map<String, dynamic> mHeader = {};
   List<Interceptor> mInterceptors = []; //自定义拦截器
   Function mLoadingView = () {
@@ -67,12 +66,6 @@ class TbHttpUtils {
       ..interceptors.add(
         InterceptorsWrapper(
           onRequest: (options, handler) {
-            //多域名处理
-            options.headers.forEach((key, value) {
-              if (mBaseMultiUrl.containsKey(key)) {
-                options.baseUrl = mBaseMultiUrl[key];
-              }
-            });
             if (kDebugMode) {
               //debug模式允许打印
               log("realUrl-->${options.baseUrl + options.path}\nqueryParameters-->${jsonEncode(options.queryParameters)}\nformData-->${jsonEncode(options.data)}\nheader-->${options.headers}");

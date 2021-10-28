@@ -111,3 +111,10 @@ Widget tbRefreshWidget<T extends TbBaseLogic>(
     },
   );
 }
+
+/*Map扩展*/
+extension customMap on Map<int, String> {
+  int get key => this.keys.first;
+
+  String get value => this.values.first;
+}

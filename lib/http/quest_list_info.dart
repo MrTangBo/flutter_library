@@ -10,6 +10,8 @@ class QuestListInfo {
   int taskId;
   CancelToken? cancelToken;
 
+
+
   QuestListInfo(this.url, this.questMethod,
       {this.data, this.queryParameters, this.options, this.taskId =-1,this.cancelToken});
 }

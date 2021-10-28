@@ -1,3 +1,4 @@
+import 'package:example/constant/route_config.dart';
 import 'package:example/view/main/MainAct.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -7,27 +8,25 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
+import 'constant/api_config.dart';
 import 'view/splash/SplashAct.dart';
 
 import 'package:flutter_library/flutter_library.dart';
 
-
 void main() {
   runApp(MyApp());
- TbAppTheme.setSystemUi();
+  TbAppTheme.setSystemUi();
 }
-
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TbHttpUtils.instance
-      ..mBaseUrl = "https://kylinba.ejar.cn"
+      ..mBaseUrl = Api.baseUrl
       ..mErrorCodeHandle = (code, msg, taskId) {
         //统一处理各种ErrorCode
       }
       ..init();
-
 
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
@@ -52,14 +51,8 @@ class MyApp extends StatelessWidget {
       fallbackLocale: Locale('zh', 'CN'),
       // 添加一个回调语言选项，以备上面指定的语言翻译不存在
       theme: TbAppTheme.mThemeData.copyWith(platform: TargetPlatform.iOS),
-      // defaultTransition: Transition.rightToLeftWithFade,
-      initialRoute: "/",
-      getPages: [
-        GetPage(name: "/", page: () => SplashAct()),
-        GetPage(name: "/MainAct", page: () => MainAct(), middlewares: []),
-
-      ],
-      title: '渡情',
+      initialRoute: RouteConfig.root,
+      getPages: RouteConfig.routePages,
       home: SplashAct(),
       builder: EasyLoading.init(builder: (context, widget) {
         return MediaQuery(
