@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_library/flutter_library.dart';
 import 'banner_info.dart';
 
-class HomeState extends TbBaseViewState {
+class HomeState extends TbBaseState {
   var bannerInfo =
       BannerInfo(list: List.generate(1, (index) => UrlInfo(title: "")));
 }
@@ -21,18 +21,19 @@ class HomeLogic extends TbBaseLogic<HomeState> {
       "pageNo": "1"
     };
     questMix([
-      QuestListInfo(Api.getBannerType.value, QuestMethod.post, data: data, taskId: Api.getBannerType.key),
-      QuestListInfo(Api.getBannerType.value, QuestMethod.post, data: data, taskId: Api.getBannerType.key),
+      QuestListInfo(Api.getBannerType, QuestMethod.post, data: data),
+      QuestListInfo(Api.getVersion, QuestMethod.get),
     ]);
-
-    post(Api.getBannerType.value, 20, data: data,);
   }
 
   @override
   resultData(result, int taskId) {
-    mState?.bannerInfo = BannerInfo.fromJson(result);
+    if(taskId ==Api.getBannerType.taskId){
+      mState?.bannerInfo = BannerInfo.fromJson(result);
+    }
+
   }
-  
+
   @override
   void tbRefreshQuest() {
     // TODO: implement tbRefreshQuest
@@ -46,7 +47,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>
+class _HomePageState extends TbBaseView<HomeLogic, HomeState, HomePage>
     with TickerProviderStateMixin {
   TabController? tabController;
   List<Text> tabList = [];
@@ -119,34 +120,35 @@ class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>
                 //   imageUrls.addAll(image);
                 // });
                 setState(() {
-                  // tabList = [
-                  //   Text(
-                  //       "${DateTime.parse("2018-02-03").difference(DateTime.parse("2018-02-01")).inMinutes}"),
-                  //   Text('热点'),
-                  //   Text('社会'),
-                  //   Text('娱乐'),
-                  //   Text('体育'),
-                  //   Text('美文'),
-                  //   Text('科技'),
-                  //   Text('财经'),
-                  //   Text('时尚')
-                  // ];
-                  // tabController = TabController(
-                  //     initialIndex: 1, length: tabList.length, vsync: this);
-                  // tabController?.animateTo(0);
 
-                  showTopSnackBar(
-                      context,
-                      CustomSnackBar.info(
-                        icon: Icon(Icons.sentiment_neutral,
-                            color: const Color(0x15000000), size: 0),
-                        message: "no_internet".tr,
-                        backgroundColor:
-                            TbSystemConfig.instance.mSnackbarBackground,
-                        textStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: TbSystemConfig.mSnackbarTextSize),
-                      ));
+                  tabList .addAll([
+                    Text(
+                        "${DateTime.parse("2018-02-03").difference(DateTime.parse("2018-02-01")).inMinutes}"),
+                    Text('热点'),
+                    Text('社会'),
+                    Text('娱乐'),
+                    Text('体育'),
+                    Text('美文'),
+                    Text('科技'),
+                    Text('财经'),
+                    Text('时尚')
+                  ]);
+                  tabController = TabController(
+                      initialIndex: 1, length: tabList.length, vsync: this);
+                  tabController?.animateTo(0);
+
+                  // showTopSnackBar(
+                  //     context,
+                  //     CustomSnackBar.info(
+                  //       icon: Icon(Icons.sentiment_neutral,
+                  //           color: const Color(0x15000000), size: 0),
+                  //       message: "no_internet".tr,
+                  //       backgroundColor:
+                  //           TbSystemConfig.instance.mSnackbarBackground,
+                  //       textStyle: TextStyle(
+                  //           color: Colors.white,
+                  //           fontSize: TbSystemConfig.mSnackbarTextSize),
+                  //     ));
                 });
               },
               child: Text("add")),
@@ -168,6 +170,8 @@ class _HomePageState extends TbBaseWidgetState<HomeLogic, HomeState, HomePage>
             child: TabBar(
               controller: tabController,
               isScrollable: true,
+              indicatorWeight: 2,
+              indicatorSize: TabBarIndicatorSize.tab,
               labelColor: Colors.red,
               unselectedLabelColor: Color(0xff666666),
               labelStyle: TextStyle(fontSize: 16.0),
@@ -215,60 +219,59 @@ class MyTabBarView extends StatefulWidget {
 }
 
 class _MyTabBarViewState
-    extends TbBaseWidgetState<HomeLogic, HomeState, MyTabBarView> {
+    extends TbBaseView<HomeLogic, HomeState, MyTabBarView> {
   @override
   void firstFrameComplete() {
     // TODO: implement firstFrameComplete
     super.firstFrameComplete();
     mLogic?.getData();
   }
-  
-  
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget buildWidget(BuildContext context) {
-    return  tbGetBuilder<HomeLogic>(
-        tag: mLogicTag,
-        builder: () {
-          return tbRefreshCustomWidget(logic: mLogic,
-            slivers:[
-              SliverAppBar(
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                expandedHeight: 200.px,
-                stretch: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: FlutterLogo(),
-                  stretchModes: [
-                    StretchMode.zoomBackground,
-                    StretchMode.blurBackground
-                  ],
-                ),
+    return tbGetBuilder<HomeLogic>(
+      tag: mLogicTag,
+      builder: () {
+        return tbRefreshCustomWidget(
+          logic: mLogic,
+          slivers: [
+            SliverAppBar(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              expandedHeight: 200.px,
+              stretch: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: FlutterLogo(),
+                stretchModes: [
+                  StretchMode.zoomBackground,
+                  StretchMode.blurBackground
+                ],
               ),
-              SliverPersistentHeader(
-                delegate: MyDelegate(),
-                pinned: true,
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return Text(
-                    "${mState?.bannerInfo.list?[0].title}",
-                    style: TextStyle(color: Colors.black87, fontSize: 20),
-                  );
-                }, childCount: 30),
-              ),
-              SliverToBoxAdapter(
-                child: Text(
+            ),
+            SliverPersistentHeader(
+              delegate: MyDelegate(),
+              pinned: true,
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return Text(
                   "${mState?.bannerInfo.list?[0].title}",
-                  style: TextStyle(color: Colors.black87, fontSize: 25.px),
-                ),
+                  style: TextStyle(color: Colors.black87, fontSize: 20),
+                );
+              }, childCount: 30),
+            ),
+            SliverToBoxAdapter(
+              child: Text(
+                "${mState?.bannerInfo.list?[0].title}",
+                style: TextStyle(color: Colors.black87, fontSize: 25.px),
               ),
-            ],
-          );
-        },
+            ),
+          ],
+        );
+      },
     );
   }
 

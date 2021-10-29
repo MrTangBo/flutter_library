@@ -27,14 +27,25 @@ Widget tbGetBuilder<T extends TbBaseLogic>(
         if (logic.mState?.mQuestStatus == QuestStatus.error ||
             logic.mState?.mQuestStatus == QuestStatus.failed) {
           return tbSetStatusWidget(
-              child: TbSystemConfig.instance.tbFailedWidget(), onTap: onTap);
+              child: TbSystemConfig.instance.tbFailedWidget(),
+              onTap: onTap ??
+                  () {
+                    logic.tbRefreshQuest();
+                  });
         } else if (logic.mState?.mQuestStatus == QuestStatus.noInternet) {
           return tbSetStatusWidget(
               child: TbSystemConfig.instance.tbNoInternetWidget(),
-              onTap: onTap);
+              onTap: onTap ??
+                  () {
+                    logic.tbRefreshQuest();
+                  });
         } else if (logic.mState?.mQuestStatus == QuestStatus.noData) {
           return tbSetStatusWidget(
-              child: TbSystemConfig.instance.tbEmptyWidget(), onTap: onTap);
+              child: TbSystemConfig.instance.tbEmptyWidget(),
+              onTap: onTap ??
+                  () {
+                    logic.tbRefreshQuest();
+                  });
         }
         return builder();
       });
@@ -114,7 +125,7 @@ Widget tbRefreshWidget<T extends TbBaseLogic>(
 
 /*Map扩展*/
 extension customMap on Map<int, String> {
-  int get key => this.keys.first;
+  int get taskId => this.keys.first;
 
-  String get value => this.values.first;
+  String get url => this.values.first;
 }

@@ -5,20 +5,15 @@ class QuestListInfo {
   QuestMethod? questMethod;
   dynamic data;
   Map<String, dynamic>? queryParameters;
-  String? url;
+  Map<int, String> mapUrl;
   Options? options;
-  int taskId;
   CancelToken? cancelToken;
 
-
-
-  QuestListInfo(this.url, this.questMethod,
-      {this.data, this.queryParameters, this.options, this.taskId =-1,this.cancelToken});
+  QuestListInfo(this.mapUrl, this.questMethod,
+      {this.data, this.queryParameters, this.options, this.cancelToken});
 }
 
 //mix并行请求，
 enum QuestMethod { post, get, mix }
 
-enum QuestStatus { error, failed ,noInternet,noData,ok}
-
-
+enum QuestStatus { error, failed, noInternet, noData, ok }

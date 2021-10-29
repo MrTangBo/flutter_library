@@ -22,7 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-
 /*export*/
 export 'package:dio/dio.dart';
 export 'package:get/get.dart' hide Response, MultipartFile, FormData;
@@ -44,9 +43,9 @@ export 'package:flutter_svg/svg.dart';
 /*base*/
 part './base/tb_base_logic.dart';
 
-part './base/tb_base_view_state.dart';
+part './base/tb_base_state.dart';
 
-part './base/tb_base_widget_state.dart';
+part './base/tb_base_view.dart';
 /*config*/
 part './config/tb_app_colors.dart';
 
@@ -74,8 +73,15 @@ part './util/shared_preferences_utils.dart';
 
 /*extend*/
 part './extend/extend.dart';
+
 part './extend/refresh_header.dart';
+
 part './extend/refresh_footer.dart';
 
+/*tbLayout*/
+part './tb_tab_layout_widget/tb_tab_layout_widget_logic.dart';
 
+part './tb_tab_layout_widget/tb_tab_layout_widget_state.dart';
+
+part './tb_tab_layout_widget/tb_tab_layout_widget_view.dart';
 

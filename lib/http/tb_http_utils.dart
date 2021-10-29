@@ -258,7 +258,7 @@ class TbHttpUtils {
     mFirstIntoApp = false;
     var mTaskIdMix = "";
     questInfos.forEach((element) {
-      mTaskIdMix += "${element.taskId}";
+      mTaskIdMix += "${element.mapUrl.url}";
     });
     if (_mNetWorkStatus == ConnectivityResult.none) {
       if (mRepeatQuests
@@ -280,13 +280,13 @@ class TbHttpUtils {
     try {
       questInfos.forEach((element) {
         if (element.questMethod == QuestMethod.post) {
-          questList.add(_mDio.post(element.url!,
+          questList.add(_mDio.post(element.mapUrl.url,
               options: element.options,
               queryParameters: element.queryParameters,
               data: element.data,
               cancelToken: element.cancelToken));
         } else if (element.questMethod == QuestMethod.get) {
-          questList.add(_mDio.get(element.url!,
+          questList.add(_mDio.get(element.mapUrl.url,
               queryParameters: element.queryParameters,
               options: element.options,
               cancelToken: element.cancelToken));
@@ -300,19 +300,19 @@ class TbHttpUtils {
       for (int i = 0; i < result.length; i++) {
         final info = TbHttpResult.fromJson(jsonDecode(result[i].toString()));
         if (kDebugMode) {
-          log("result-${questInfos[i].taskId}->${result[i]}");
+          log("result-${questInfos[i].mapUrl.taskId}->${result[i]}");
         }
         if (onSuccess != null) {
           if (info.code == mSuccessCode) {
-            onSuccess(info.data, questInfos[i].taskId);
+            onSuccess(info.data, questInfos[i].mapUrl.taskId);
           }
         }
         if (onFiled != null) {
           if (info.code != mSuccessCode) {
-            onFiled(info.code, info.msg, questInfos[i].taskId);
+            onFiled(info.code, info.msg, questInfos[i].mapUrl.taskId);
           }
         } else {
-          mErrorCodeHandle(info.code, info.msg, questInfos[i].taskId);
+          mErrorCodeHandle(info.code, info.msg, questInfos[i].mapUrl.taskId);
         }
       }
     } on DioError catch (e) {

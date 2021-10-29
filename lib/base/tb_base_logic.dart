@@ -1,6 +1,6 @@
 part of flutter_library;
 
-abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
+abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   bool mIsShowLoading = true;
 
   int mPage = 1;
@@ -16,6 +16,7 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   setViewState(T? state) {
     this.mState = state;
   }
+
 
   /*下拉刷新*/
   void onRefresh() {
@@ -38,14 +39,14 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   void tbRefreshQuest() {}
 
   /*post请求*/
-  post(String url, int taskId,
+  post(Map<int,String> mapUrl,
       {dynamic data,
       Map<String, dynamic>? queryParameters,
       Options? options,
       QuestSuccess? onSuccess,
       QuestFailed? onFiled,
       QuestError? onError}) async {
-    TbHttpUtils.instance.post(url, taskId,
+    TbHttpUtils.instance.post(mapUrl.url, mapUrl.taskId,
         data: data,
         queryParameters: queryParameters,
         token: token,
@@ -66,13 +67,13 @@ abstract class TbBaseLogic<T extends TbBaseViewState> extends GetxController {
   }
 
   /*get请求*/
-  get(String url, int taskId,
+  get(Map<int,String> mapUrl,
       {Map<String, dynamic>? queryParameters,
       Options? options,
       QuestSuccess? onSuccess,
       QuestError? onError,
       QuestFailed? onFiled}) async {
-    TbHttpUtils.instance.get(url, taskId,
+    TbHttpUtils.instance.get(mapUrl.url, mapUrl.taskId,
         queryParameters: queryParameters,
         token: token,
         options: options, onSuccess: (result, taskId) {

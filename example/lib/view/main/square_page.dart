@@ -11,27 +11,40 @@ class SquarePage extends StatefulWidget {
 class _SquarePageState extends State<SquarePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: ElevatedButton(
-          child: Text("SquarePage"),
-          onPressed: () async {
-          var s=  await  SharedPreferencesUtils.getPreference<String>(
-                "test", "dsadad");
-            showTopSnackBar(context,CustomSnackBar.info(
-              icon: Icon(Icons.sentiment_neutral,
-                  color: const Color(0x15000000), size: 0),
-              message: s,
-              backgroundColor:
-              TbSystemConfig.instance.mSnackbarBackground,
-              textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: TbSystemConfig.mSnackbarTextSize),
-            ));
-          },
-        ),
-      ),
+    var list = [Text("data"), Text("data"), Text("data")];
+
+    return SafeArea(
+      top: true,
+      child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    TbTabLayoutWidgetLogic.getLoic().addTabs(list);
+                  },
+                  child: Text("add")),
+              Expanded(
+                child: TbTabLayoutWidget(
+                  tabs: list,
+                  isScrollable: true,
+                  indicatorFullTab: false,
+                  onlyTabBar: false,
+                  tabBarHeight: 58.px,
+                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                  labelColor: Colors.deepPurple,
+                  indicatorColor: Colors.deepPurple,
+                  // indicator: ShapeDecoration(color: Colors.red,shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)) ),
+                  builder: (context,index){
+                    return Text("data$index");
+                  },
+                  onSelectListener: (controller, index) {
+                    Fluttertoast.showToast(msg: "$index");
+                  },
+                ),
+              )
+            ],
+          )),
     );
   }
 }

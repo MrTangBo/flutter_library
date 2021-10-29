@@ -36,7 +36,7 @@ class SharedPreferencesUtils {
     } else if (defaultValue is bool) {
       return prefs.getBool(key) ?? Future.value(defaultValue);
     } else if (defaultValue is String) {
-      return prefs.getString(key) ?? defaultValue;
+      return prefs.getString(key)  ?? Future.value(defaultValue);
     } else if (defaultValue is List) {
       return prefs.getStringList(key) ?? Future.value(defaultValue);
     } else {

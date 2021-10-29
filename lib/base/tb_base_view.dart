@@ -1,8 +1,8 @@
 part of flutter_library;
 
 /*state基类*/
-abstract class TbBaseWidgetState<T extends TbBaseLogic,
-        E extends TbBaseViewState, S extends StatefulWidget> extends State<S>
+abstract class TbBaseView<T extends TbBaseLogic,
+        E extends TbBaseState, S extends StatefulWidget> extends State<S>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
 
   T? mLogic;
@@ -16,12 +16,10 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
 
   ConnectivityResult? _mNetWorkStatus; //当前网络状态
 
-
-
   @override
   void initState() {
-    super.initState();
-    initView();
+    _initView();
+    mState?.init();
     WidgetsBinding.instance
       ?..addObserver(this) //添加观察者
       ..addPostFrameCallback((timeStamp) {
@@ -30,6 +28,7 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
           _mBuildComplete = true;
         }
       });
+    super.initState();
   }
 
   @override
@@ -81,7 +80,6 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   }
 
 
-
   /*必须吃初始化调用setViewState方法*/
   void initViewState() {}
 
@@ -91,7 +89,7 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   @override
   bool get wantKeepAlive => false;
 
-  initView() {
+  _initView() {
     initViewState();
     initInternetStatus();
   }
@@ -101,13 +99,9 @@ abstract class TbBaseWidgetState<T extends TbBaseLogic,
   }
 
   void initInternetStatus() {
-    mState?.mRefreshController = EasyRefreshController();
     Connectivity().checkConnectivity().then((value) {
       //获取当前的网络
       _mNetWorkStatus = value;
-      if (value == ConnectivityResult.none) {
-        mState?.mRefreshController = EasyRefreshController();
-      }
     });
     TbHttpUtils.instance
       ..mNetWorkHandle = (status) {

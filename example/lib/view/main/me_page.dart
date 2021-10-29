@@ -10,7 +10,7 @@ class MePage extends StatefulWidget {
   _MePageState createState() => _MePageState();
 }
 
-class _MePageState extends TbBaseWidgetState {
+class _MePageState extends TbBaseView {
   @override
   Widget buildWidget(BuildContext context) {
     return Scaffold(

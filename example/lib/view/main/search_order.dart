@@ -13,7 +13,7 @@ class SearchOrder extends StatefulWidget {
 }
 
 class _SearchOrderState
-    extends TbBaseWidgetState<TbBaseLogic, TbBaseViewState, SearchOrder>
+    extends TbBaseView<TbBaseLogic, TbBaseState, SearchOrder>
     with SingleTickerProviderStateMixin {
   var num = 1.0;
 
