@@ -156,13 +156,21 @@ abstract class TbBaseView<T extends TbBaseLogic,
     }
   }
 
-  void onBackHome() {}
+  void onBackHome() {
+    mLogic?.onBackHome();
+  }
 
-  void onResume() {}
+  void onResume() {
+    mLogic?.onResume();
+  }
 
-  void onPause() {}
+  void onPause() {
+    mLogic?.onPause();
+  }
 
-  void onDetach() {}
+  void onDetach() {
+    mLogic?.onDetach();
+  }
 
   @override
   void didPopNext() {

@@ -85,3 +85,8 @@ part './tb_tab_layout_widget/tb_tab_layout_widget_state.dart';
 
 part './tb_tab_layout_widget/tb_tab_layout_widget_view.dart';
 
+/*tbNavigation*/
+
+part './tb_bottom_navigation/tb_bottom_navigation_logic.dart';
+part './tb_bottom_navigation/tb_bottom_navigation_state.dart';
+part './tb_bottom_navigation/tb_bottom_navigation_view.dart';

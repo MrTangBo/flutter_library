@@ -158,6 +158,15 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
     update();
   }
 
+  void onBackHome() {}
+
+  void onResume() {
+  }
+
+  void onPause() {}
+
+  void onDetach() {}
+
   @override
   void dispose() {
     mState?.dispose();
