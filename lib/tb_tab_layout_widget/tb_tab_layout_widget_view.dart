@@ -3,6 +3,7 @@ part of flutter_library;
 /*TabBar+TabBarView的使用*/
 class TbTabLayoutWidget extends StatefulWidget {
   final Function(TabController controller, int index)? onSelectListener;
+  final Function(TbTabLayoutWidgetLogic? logic)? logic;
   final Widget Function(BuildContext?, int)? builder;
 
   final bool onlyTabBar; //是否只需要Tab 默认为false
@@ -29,6 +30,8 @@ class TbTabLayoutWidget extends StatefulWidget {
 
   final bool? indicatorFullTab; //指示器是否充满Tab 默认和文字对齐
 
+  final bool wantKeepAlive;
+
   TbTabLayoutWidget(
       {Key? key,
       this.tabs,
@@ -50,7 +53,8 @@ class TbTabLayoutWidget extends StatefulWidget {
       this.indicatorColor,
       this.indicatorPadding,
       this.tabBarAlignment = Alignment.center,
-      this.indicatorFullTab = false})
+      this.indicatorFullTab = false,
+      this.wantKeepAlive = true, this.logic})
       : super(key: key);
 
   @override
@@ -61,13 +65,17 @@ class _TbTabLayoutWidgetPageState extends TbBaseView<TbTabLayoutWidgetLogic,
     TbTabLayoutWidgetState, TbTabLayoutWidget> with TickerProviderStateMixin {
   TabController? _tabController;
 
-  int _currentIndex= 0;
+  int _currentIndex = 0;
 
   TabBarIndicatorSize _tabBarIndicatorSize = TabBarIndicatorSize.label;
 
   @override
+  bool get wantKeepAlive => widget.wantKeepAlive;
+
+  String tag ="0";
+
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.tabs != null) {
       mState!.tabList.addAll(widget.tabs!);
@@ -93,7 +101,11 @@ class _TbTabLayoutWidgetPageState extends TbBaseView<TbTabLayoutWidgetLogic,
 
   @override
   void initViewState() {
-    setViewState(TbTabLayoutWidgetLogic(), TbTabLayoutWidgetState());
+    tag =DateTime.now().millisecondsSinceEpoch.toString();
+    setViewState(TbTabLayoutWidgetLogic(), TbTabLayoutWidgetState(), logicTag:tag);
+    if(widget.logic!=null){
+      widget.logic!(mLogic);
+    }
   }
 
   @override
@@ -103,6 +115,7 @@ class _TbTabLayoutWidgetPageState extends TbBaseView<TbTabLayoutWidgetLogic,
   Widget buildWidget(BuildContext context) {
     return GetBuilder<TbTabLayoutWidgetLogic>(
       id: "tabLayout",
+      tag: tag,
       builder: (logic) {
         return widget.onlyTabBar
             ? UnconstrainedBox(

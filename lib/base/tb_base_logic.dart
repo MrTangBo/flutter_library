@@ -7,6 +7,7 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   int mPageSize = 15;
 
   T? mState;
+  String? mLogicTag;
 
   bool _isRefresh = false;
   bool _isLoadMore = false;

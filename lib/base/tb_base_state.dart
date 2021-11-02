@@ -5,7 +5,6 @@ abstract class TbBaseState {
 
   late EasyRefreshController mRefreshController;
 
-
   init(){
     mRefreshController =EasyRefreshController();
   }

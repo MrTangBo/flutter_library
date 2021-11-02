@@ -17,6 +17,7 @@ class TbBottomNavigationWidget extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Decoration? decoration;
+  final bool wantKeepAlive;
 
   TbBottomNavigationWidget(
       {Key? key,
@@ -34,7 +35,8 @@ class TbBottomNavigationWidget extends StatefulWidget {
       this.pageDuration,
       this.margin,
       this.padding,
-      this.decoration})
+      this.decoration,
+      this.wantKeepAlive = true})
       : super(key: key);
 
   @override
@@ -46,11 +48,18 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
   @override
   Widget build(BuildContext context) => buildWidget(context);
 
+  String tag ="0";
+
   @override
   void initViewState() {
     super.initViewState();
-    setViewState(TbBottomNavigationLogic(), TbBottomNavigationState());
+    tag =DateTime.now().millisecondsSinceEpoch.toString();
+    setViewState(TbBottomNavigationLogic(), TbBottomNavigationState(),
+        logicTag: tag);
   }
+
+  @override
+  bool get wantKeepAlive => widget.wantKeepAlive;
 
   @override
   void initState() {
@@ -84,6 +93,7 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
   Widget buildWidget(BuildContext context) {
     return GetBuilder<TbBottomNavigationLogic>(
       id: "TbBottomNavigationWidget",
+      tag: tag,
       builder: (logic) {
         return Column(
           children: [

@@ -2,8 +2,6 @@ import 'package:example/constant/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_library/flutter_library.dart';
 
-import 'home_page.dart';
-
 class SquarePage extends StatefulWidget {
   const SquarePage({Key? key}) : super(key: key);
 
@@ -13,7 +11,7 @@ class SquarePage extends StatefulWidget {
 
 class _SquarePageState extends TbBaseView<TbBaseLogic,TbBaseState,SquarePage> {
 
-  int currentIndex =0;
+  TbTabLayoutWidgetLogic? tLogic;
 
   @override
   Widget buildWidget(BuildContext context) {
@@ -26,7 +24,7 @@ class _SquarePageState extends TbBaseView<TbBaseLogic,TbBaseState,SquarePage> {
             children: [
               ElevatedButton(
                   onPressed: () {
-                    TbTabLayoutWidgetLogic.getLoic().addTabs([Text("电影")]);
+                    tLogic!.addTabs(() => [Text("电影"),Text("电影")]);
                   },
                   child: Text("add")),
               Expanded(
@@ -46,8 +44,10 @@ class _SquarePageState extends TbBaseView<TbBaseLogic,TbBaseState,SquarePage> {
                     },child: Text("data$index")));
                   },
                   onSelectListener: (controller, index) {
-                    currentIndex =index;
                     Fluttertoast.showToast(msg: "$index");
+                  },
+                  logic: (lo){
+                    tLogic =lo;
                   },
                 ),
               )

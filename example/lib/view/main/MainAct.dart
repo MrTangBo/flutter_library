@@ -15,7 +15,7 @@ class MainAct extends StatefulWidget {
   _RoutePageState createState() => _RoutePageState();
 }
 
-const Map _bottomNames = {
+const Map<String, String> _bottomNames = {
   "home": "首页",
   "transation": "交易",
   "maidan": "广场",
@@ -24,11 +24,6 @@ const Map _bottomNames = {
 };
 
 class _RoutePageState extends State<MainAct> {
-  List<BottomNavigationBarItem> _bottomTabList = [];
-  int _mCurrentIndex = 0;
-
-  PageController controller = PageController();
-
   final List<Widget> _mPage = [
     HomePage(),
     TransationPage(),
@@ -38,45 +33,12 @@ class _RoutePageState extends State<MainAct> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    _bottomNames.forEach((key, value) {
-      _bottomTabList.add(_bottomNavigationBar(key, value));
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        itemBuilder: (_, index) {
-          return _mPage[index];
-        },
-        onPageChanged: (index){
-         setState(() {
-           _mCurrentIndex =index;
-         });
-        },
-        controller: controller,
-        itemCount: _mPage.length,
-      ),
-
-      // IndexedStack(
-      //   children: _mPage,
-      //   index: _mCurrentIndex,
-      // ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        items: _bottomTabList,
-        currentIndex: _mCurrentIndex,
-        onTap: (index) {
-          setState(() {
-            _mCurrentIndex = index;
-            controller.jumpToPage(index);
-            // controller.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.linear);
-          });
-        },
+      body: TbBottomNavigationWidget(
+        pages: _mPage,
+        titles: _bottomNames.values.toList(),
+        iconPath: _bottomNavigationBar(),
       ),
       floatingActionButton: Container(
         width: 40.px,
@@ -86,19 +48,12 @@ class _RoutePageState extends State<MainAct> {
     );
   }
 
-  BottomNavigationBarItem _bottomNavigationBar(String key, String value) {
-    return BottomNavigationBarItem(
-        icon: Image.asset(
-          'assets/images/${key}_unselect.png',
-          width: 20.px,
-          height: 20.px,
-        ),
-        activeIcon: Image.asset(
-          'assets/images/${key}_select.png',
-          width: 20.px,
-          height: 20.px,
-        ),
-        label: value,
-        tooltip: "");
+  Map<String, String> _bottomNavigationBar() {
+    Map<String, String> map = {};
+    _bottomNames.forEach((key, value) {
+      map["assets/images/${key}_unselect.png"] =
+          "assets/images/${key}_select.png";
+    });
+    return map;
   }
 }

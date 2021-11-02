@@ -62,7 +62,7 @@ class _SearchOrderState
               child: ElevatedButton(
                   onPressed: () {
                     SharedPreferencesUtils.savePreference<String>( "test", "存了一个值");
-                    Get.to(SquarePage());
+                    Get.to(SquarePage(),arguments: {"logicTag":"search"});
                   },
 
                   child: Text("guan")),
