@@ -2,7 +2,7 @@ part of flutter_library;
 
 class TbAppTheme {
 
-  static final ThemeData mThemeData = ThemeData(
+  static  ThemeData mThemeData = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.white,
     primaryColor: AppColors.color_161F2F,

@@ -1,10 +1,9 @@
 import 'dart:io';
+
 import 'package:example/constant/api_config.dart';
-import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_library/flutter_library.dart';
+
 import 'banner_info.dart';
 
 class HomeState extends TbBaseState {
@@ -22,7 +21,7 @@ class HomeLogic extends TbBaseLogic<HomeState> {
     };
     questMix([
       QuestListInfo(Api.getBannerType, QuestMethod.post, data: data),
-      QuestListInfo(Api.getVersion, QuestMethod.get),
+
     ]);
   }
 
@@ -151,7 +150,7 @@ class _HomePageState extends TbBaseView<HomeLogic, HomeState, HomePage>
                   //     ));
                 });
               },
-              child: Text("add")),
+              child: Text("添加",style: TextStyle(fontSize: 16.px),)),
           Visibility(
             child: imageUrls.isEmpty
                 ? Placeholder()

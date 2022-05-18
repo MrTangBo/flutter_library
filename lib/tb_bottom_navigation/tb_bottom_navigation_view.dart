@@ -18,25 +18,28 @@ class TbBottomNavigationWidget extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final Decoration? decoration;
   final bool wantKeepAlive;
+  final bool showSelectedLabels;
+  final bool showUnselectedLabels;
 
-  TbBottomNavigationWidget(
-      {Key? key,
-      this.builderPage,
-      this.physics,
-      this.animateToPage = true,
-      this.bottomNavigationBarBgColor,
-      this.pages,
-      this.titles,
-      this.selectIconSize,
-      this.unSelectIconSize,
-      this.bottomNavigationBarTheme,
-      this.iconPath,
-      this.bottomNavigationBarHeight,
-      this.pageDuration,
-      this.margin,
-      this.padding,
-      this.decoration,
-      this.wantKeepAlive = true})
+  TbBottomNavigationWidget({Key? key,
+    this.builderPage,
+    this.physics,
+    this.animateToPage = true,
+    this.bottomNavigationBarBgColor,
+    this.pages,
+    this.titles,
+    this.selectIconSize,
+    this.unSelectIconSize,
+    this.bottomNavigationBarTheme,
+    this.iconPath,
+    this.bottomNavigationBarHeight,
+    this.pageDuration,
+    this.margin,
+    this.padding,
+    this.decoration,
+    this.wantKeepAlive = true,
+    this.showSelectedLabels = true,
+    this.showUnselectedLabels = true})
       : super(key: key);
 
   @override
@@ -44,16 +47,20 @@ class TbBottomNavigationWidget extends StatefulWidget {
 }
 
 class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
-    TbBottomNavigationState, TbBottomNavigationWidget> {
+    TbBottomNavigationState,
+    TbBottomNavigationWidget> {
   @override
   Widget build(BuildContext context) => buildWidget(context);
 
-  String tag ="0";
+  String tag = "0";
 
   @override
   void initViewState() {
     super.initViewState();
-    tag =DateTime.now().millisecondsSinceEpoch.toString();
+    tag = DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
     setViewState(TbBottomNavigationLogic(), TbBottomNavigationState(),
         logicTag: tag);
   }
@@ -99,30 +106,30 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
           children: [
             Expanded(
                 child: PageView.builder(
-              physics: widget.physics,
-              itemBuilder: (_, index) {
-                return widget.pages![index];
-              },
-              onPageChanged: (index) {
-                mState!.mCurrentIndex = index;
-                mLogic?.update(["TbBottomNavigationWidget"]);
-              },
-              controller: mState!.mController,
-              itemCount: widget.pages!.length,
-            )),
+                  physics: widget.physics,
+                  itemBuilder: (_, index) {
+                    return widget.pages![index];
+                  },
+                  onPageChanged: (index) {
+                    mState!.mCurrentIndex = index;
+                    mLogic?.update(["TbBottomNavigationWidget"]);
+                  },
+                  controller: mState!.mController,
+                  itemCount: widget.pages!.length,
+                )),
             Theme(
-              data: TbAppTheme.mThemeData.copyWith(
-                  bottomNavigationBarTheme: widget.bottomNavigationBarTheme),
+              data: TbAppTheme.mThemeData.copyWith(bottomNavigationBarTheme: widget.bottomNavigationBarTheme),
               child: Container(
                 margin: widget.margin,
                 padding: widget.padding,
                 decoration: widget.decoration,
                 height: widget.bottomNavigationBarHeight,
                 child: BottomNavigationBar(
-                    backgroundColor: widget.bottomNavigationBarBgColor ??
-                        Theme.of(context).primaryColor,
+                    backgroundColor: widget.bottomNavigationBarBgColor ?? Theme.of(context).primaryColor,
                     elevation: 0,
                     items: mState!.mBottomTabList,
+                    showSelectedLabels: widget.showSelectedLabels,
+                    showUnselectedLabels: widget.showUnselectedLabels,
                     currentIndex: mState!.mCurrentIndex,
                     onTap: (index) {
                       mState!.mCurrentIndex = index;

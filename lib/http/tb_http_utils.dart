@@ -24,10 +24,9 @@ class TbHttpUtils {
   Dio _mDio = Dio();
   dynamic mSuccessCode = "200"; //请求成功状态码
   List jsonKey = ["code", "data", "msg"];
-  String mBaseUrl = ""; //单域名设置
   String mContentType = "application/json";
-  int mReceiveTimeout = 15; //接收数据的最长时限.
-  int mSendTimeout = 15; //发送数据最长时限
+  int mReceiveTimeout = 15000; //接收数据的最长时限.
+  int mSendTimeout = 15000; //发送数据最长时限
   int mConnectTimeout = 15000; // 连接服务器超时时间，单位是毫秒.
   String mPoxyUrl = ""; //代理url
   bool mTrustAllCertificate = true; //信任所有证书
@@ -54,7 +53,6 @@ class TbHttpUtils {
   init() {
     _mDio
       ..options = BaseOptions(
-          baseUrl: mBaseUrl,
           contentType: mContentType,
           receiveTimeout: mReceiveTimeout,
           sendTimeout: mSendTimeout,

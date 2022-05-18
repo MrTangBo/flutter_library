@@ -6,6 +6,9 @@ class TbHttpResult<T> {
 
   List _jsonKey =TbHttpUtils.instance.jsonKey;
 
+
+  TbHttpResult(this.code, this.data, this.msg);
+
   /*jsonKey有一定的顺序要求code->data->msg*/
   TbHttpResult.fromJson(dynamic json) {
     code = json[_jsonKey[0]];
