@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   dio: ^4.0.6
   flutter_easyrefresh: ^2.2.1
-  #  flutter_swiper: 1.1.6
+  flutter_swiper: 1.1.6 #轮播图
   get: ^4.3.8
   shared_preferences: ^2.0.6
   connectivity_plus: ^1.0.6
@@ -28,6 +28,7 @@ dependencies:
   flutter_svg: ^0.22.0
   cached_network_image: ^3.1.0
   badges: ^2.0.2
+  system_proxy: 0.1.0 #抓包代理插件
 
 
 dev_dependencies:

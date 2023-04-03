@@ -48,7 +48,7 @@ class TbHttpUtils {
 
   bool mShowErrorMsg = kDebugMode; //是否展示请求超时的或者请求错误弹窗提示;(默认debug模式展示)
 
-  QuestFailed mErrorCodeHandle = (_, __, ___) {};//请求失败
+  QuestFailed mErrorCodeHandle = (_, __, ___) {}; //请求失败
 
   init() {
     _mDio
@@ -84,8 +84,7 @@ class TbHttpUtils {
     //信任所有证书
     (_mDio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => mTrustAllCertificate;
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => mTrustAllCertificate;
     };
 
     /*检测网络*/

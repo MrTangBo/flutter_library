@@ -4,21 +4,22 @@ import 'package:flutter_library/flutter_library.dart';
 import 'constant/api_config.dart';
 import 'view/splash/SplashAct.dart';
 
-void main() {
+void main() async{
+  tbInitProxy();
   runApp(MyApp());
-  TbAppTheme.setSystemUi();
+  TbAppTheme.setSystemUi(navigationColor: Colors.black,brightness: Brightness.light);
 }
 
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     TbHttpUtils.instance
-      ..mPoxyUrl="192.168.1.114:8888"
       ..mErrorCodeHandle = (code, msg, taskId) {
         //统一处理各种ErrorCode
       }
       ..init();
-
     return GetMaterialApp(
       translations: TbBaseGlobalization(),
       // 将会按照此处指定的语言翻译

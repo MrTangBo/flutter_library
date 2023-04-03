@@ -15,7 +15,7 @@ class _MePageState extends TbBaseView {
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.blue,statusBarBrightness: Brightness.dark,statusBarIconBrightness: Brightness.light),
         title: Text("dsa"),
         centerTitle: false,
         backgroundColor: Colors.blue,

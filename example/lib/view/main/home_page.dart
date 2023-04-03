@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:example/constant/api_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_library/flutter_library.dart';
 
 import 'banner_info.dart';
@@ -21,16 +22,14 @@ class HomeLogic extends TbBaseLogic<HomeState> {
     };
     questMix([
       QuestListInfo(Api.getBannerType, QuestMethod.post, data: data),
-
     ]);
   }
 
   @override
   resultData(result, int taskId) {
-    if(taskId ==Api.getBannerType.taskId){
+    if (taskId == Api.getBannerType.taskId) {
       mState?.bannerInfo = BannerInfo.fromJson(result);
     }
-
   }
 
   @override
@@ -108,100 +107,110 @@ class _HomePageState extends TbBaseView<HomeLogic, HomeState, HomePage>
   @override
   Widget buildWidget(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                // player.start();
-                // var image = await ImagePicker().pickMultiImage(maxHeight: 80);
-                // imageUrls.clear();
-                // setState(() {
-                //   imageUrls.addAll(image);
-                // });
-                setState(() {
-
-                  tabList .addAll([
-                    Text(
-                        "${DateTime.parse("2018-02-03").difference(DateTime.parse("2018-02-01")).inMinutes}"),
-                    Text('热点'),
-                    Text('社会'),
-                    Text('娱乐'),
-                    Text('体育'),
-                    Text('美文'),
-                    Text('科技'),
-                    Text('财经'),
-                    Text('时尚')
-                  ]);
-                  tabController = TabController(
-                      initialIndex: 1, length: tabList.length, vsync: this);
-                  tabController?.animateTo(0);
-
-                  // showTopSnackBar(
-                  //     context,
-                  //     CustomSnackBar.info(
-                  //       icon: Icon(Icons.sentiment_neutral,
-                  //           color: const Color(0x15000000), size: 0),
-                  //       message: "no_internet".tr,
-                  //       backgroundColor:
-                  //           TbSystemConfig.instance.mSnackbarBackground,
-                  //       textStyle: TextStyle(
-                  //           color: Colors.white,
-                  //           fontSize: TbSystemConfig.mSnackbarTextSize),
-                  //     ));
-                });
-              },
-              child: Text("添加",style: TextStyle(fontSize: 16.px),)),
-          Visibility(
-            child: imageUrls.isEmpty
-                ? Placeholder()
-                : Image.file(File(imageUrls[1].path)),
-            visible: imageUrls.isNotEmpty,
+      child: Scaffold(
+          appBar: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.blue,statusBarBrightness: Brightness.dark,statusBarIconBrightness: Brightness.light),
+            title: Text("dsa"),
+            centerTitle: false,
+            backgroundColor: Colors.white,
           ),
+        body: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  // player.start();
+                  // var image = await ImagePicker().pickMultiImage(maxHeight: 80);
+                  // imageUrls.clear();
+                  // setState(() {
+                  //   imageUrls.addAll(image);
+                  // });
+                  setState(() {
+                    tabList.addAll([
+                      Text(
+                          "${DateTime.parse("2018-02-03").difference(DateTime.parse("2018-02-01")).inMinutes}"),
+                      Text('热点'),
+                      Text('社会'),
+                      Text('娱乐'),
+                      Text('体育'),
+                      Text('美文'),
+                      Text('科技'),
+                      Text('财经'),
+                      Text('时尚')
+                    ]);
+                    tabController = TabController(
+                        initialIndex: 1, length: tabList.length, vsync: this);
+                    tabController?.animateTo(0);
 
-          // FijkView(
-          //   player: player,
-          //   height: 300,
-          //
-          // ),
-          Container(
-            color: Color(0xfff4f5f6),
-            height: 38.0,
-            child: TabBar(
-              controller: tabController,
-              isScrollable: true,
-              indicatorWeight: 2,
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelColor: Colors.red,
-              unselectedLabelColor: Color(0xff666666),
-              labelStyle: TextStyle(fontSize: 16.0),
-              tabs: tabList.map((item) {
-                return Tab(
-                  text: item.data,
-                );
-              }).toList(),
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: List.generate(
-                tabList.length,
-                (index) {
-                  return Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: MyTabBarView(
-                          mLogicTag: "home_$index",
-                        ),
-                      ),
-                    ],
-                  );
+                    // showTopSnackBar(
+                    //     context,
+                    //     CustomSnackBar.info(
+                    //       icon: Icon(Icons.sentiment_neutral,
+                    //           color: const Color(0x15000000), size: 0),
+                    //       message: "no_internet".tr,
+                    //       backgroundColor:
+                    //           TbSystemConfig.instance.mSnackbarBackground,
+                    //       textStyle: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: TbSystemConfig.mSnackbarTextSize),
+                    //     ));
+                  });
                 },
+                child: Text(
+                  "添加",
+                  style: TextStyle(fontSize: 16.px),
+                )),
+            Visibility(
+              child: imageUrls.isEmpty
+                  ? Placeholder()
+                  : Image.file(File(imageUrls[1].path)),
+              visible: imageUrls.isNotEmpty,
+            ),
+
+            // FijkView(
+            //   player: player,
+            //   height: 300,
+            //
+            // ),
+            Container(
+              color: Color(0xfff4f5f6),
+              height: 38.0,
+              child: TabBar(
+                controller: tabController,
+                isScrollable: true,
+                indicatorWeight: 2,
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelColor: Colors.red,
+                unselectedLabelColor: Color(0xff666666),
+                labelStyle: TextStyle(fontSize: 16.0),
+                tabs: tabList.map((item) {
+                  return Tab(
+                    text: item.data,
+                  );
+                }).toList(),
               ),
             ),
-          )
-        ],
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: List.generate(
+                  tabList.length,
+                  (index) {
+                    return Stack(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: MyTabBarView(
+                            mLogicTag: "home_$index",
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,7 @@
 part of flutter_library;
 
 class TbAppTheme {
-
-  static  ThemeData mThemeData = ThemeData(
+  static ThemeData mThemeData = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.white,
     primaryColor: AppColors.color_161F2F,
@@ -40,42 +39,42 @@ class TbAppTheme {
   );
 
   static setSystemUi(
-      {Color? statusColor ,
+      {Color? statusColor,
       Color? navigationColor,
-      bool isDark = true,
+      Brightness? brightness,
       bool isImmersed = false,
       bool mShowNavigationBar = true,
       bool isShowStatusBar = true}) {
     /*设置之前恢复默认系统UI*/
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     if (isImmersed) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
     } else {
       if (!mShowNavigationBar) {
-        SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+            overlays: [SystemUiOverlay.top]);
       }
       if (!isShowStatusBar) {
-        SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+            overlays: [SystemUiOverlay.bottom]);
       }
     }
-    if (isDark) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: navigationColor,
-        systemNavigationBarDividerColor:navigationColor ?? TbSystemConfig.instance.mNavigationColor,
-        statusBarColor: statusColor ?? TbSystemConfig.instance.mStatusBarColor,
-        systemNavigationBarIconBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ));
+    var temp = brightness ?? TbSystemConfig.instance.brightness;
+    Brightness iosBrightness;
+    if (temp == Brightness.light) {
+      iosBrightness = Brightness.dark;
     } else {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: navigationColor,
-        systemNavigationBarDividerColor:navigationColor ?? TbSystemConfig.instance.mNavigationColor,
-        statusBarColor: statusColor ?? TbSystemConfig.instance.mStatusBarColor,
-        systemNavigationBarIconBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
-      ));
+      iosBrightness = Brightness.light;
     }
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: navigationColor,
+      systemNavigationBarDividerColor:
+          navigationColor ?? TbSystemConfig.instance.mNavigationColor,
+      statusBarColor: statusColor ?? TbSystemConfig.instance.mStatusBarColor,
+      systemNavigationBarIconBrightness: temp,
+      statusBarIconBrightness: temp,
+      statusBarBrightness: iosBrightness,
+    ));
   }
 }

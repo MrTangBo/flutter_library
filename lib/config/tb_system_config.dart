@@ -22,11 +22,13 @@ class TbSystemConfig {
 
   Color mStatusBarColor = Colors.transparent; //顶部状态栏颜色
   Color mNavigationColor = Colors.transparent; //底部状态栏颜色
+  Brightness brightness = Brightness.dark;
   double mStandardSize = 750; //依赖标准尺寸
 
   Color mSnackbarBackground = Color(0x80000000);
   Color mSnackbarTextColor = Colors.white;
   static dynamic mSnackbarTextSize = 15.px;
+  static String proxyStr = "";
 
   final RouteObserver<Route<dynamic>> routeObserver = RouteObserver();
 

@@ -6,7 +6,7 @@ class TbBottomNavigationWidget extends StatefulWidget {
   final ScrollPhysics? physics; //PageView是可手动滑动设置
   final bool animateToPage; //PageView切换是否开启动画效果
   final Color? bottomNavigationBarBgColor; //PageView切换是否又动画效果
-  List<Widget>? pages;
+  final List<Widget>? pages;
   final Map<String, String>? iconPath; //这里方便在一个地方配置图标 (key代表未选中，value代表选中图标的路径)
   final List<String>? titles;
   final double? selectIconSize;
@@ -20,6 +20,7 @@ class TbBottomNavigationWidget extends StatefulWidget {
   final bool wantKeepAlive;
   final bool showSelectedLabels;
   final bool showUnselectedLabels;
+  final  Function(int)? pageSelect;
 
   TbBottomNavigationWidget({Key? key,
     this.builderPage,
@@ -39,6 +40,7 @@ class TbBottomNavigationWidget extends StatefulWidget {
     this.decoration,
     this.wantKeepAlive = true,
     this.showSelectedLabels = true,
+    this.pageSelect,
     this.showUnselectedLabels = true})
       : super(key: key);
 
@@ -61,8 +63,7 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
         .now()
         .millisecondsSinceEpoch
         .toString();
-    setViewState(TbBottomNavigationLogic(), TbBottomNavigationState(),
-        logicTag: tag);
+    setViewState(TbBottomNavigationLogic(), TbBottomNavigationState(), logicTag: tag);
   }
 
   @override
@@ -113,6 +114,7 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
                   onPageChanged: (index) {
                     mState!.mCurrentIndex = index;
                     mLogic?.update(["TbBottomNavigationWidget"]);
+                    widget.pageSelect?.call(index);
                   },
                   controller: mState!.mController,
                   itemCount: widget.pages!.length,
@@ -133,6 +135,7 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
                     currentIndex: mState!.mCurrentIndex,
                     onTap: (index) {
                       mState!.mCurrentIndex = index;
+                      widget.pageSelect?.call(index);
                       mLogic?.update(["TbBottomNavigationWidget"]);
                       if (widget.animateToPage) {
                         mState!.mController.animateToPage(index,

@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_library/flutter_library.dart';
 
 import 'home_page.dart';
 import 'log_page.dart';
 import 'me_page.dart';
 import 'square_page.dart';
 import 'transation_page.dart';
-import 'package:flutter_library/flutter_library.dart';
 
 class MainAct extends StatefulWidget {
   const MainAct({Key? key}) : super(key: key);
@@ -31,6 +30,12 @@ class _RoutePageState extends State<MainAct> {
     LogPage(),
     MePage()
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

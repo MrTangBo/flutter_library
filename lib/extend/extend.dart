@@ -129,3 +129,40 @@ extension customMap on Map<int, String> {
 
   String get url => this.values.first;
 }
+
+/*初始化抓包代理*/
+void tbInitProxy() async {
+  if (kDebugMode) {
+    String proxyStr = "";
+    try {
+      Map<String, String>? proxy = await SystemProxy.getProxySettings();
+      if (proxy != null) {
+        proxyStr = '${proxy["host"]}:${proxy["port"]}';
+      } else {
+        proxyStr = '';
+      }
+    } on PlatformException {
+      proxyStr = '';
+    }
+
+    ///配置代理
+    TbHttpUtils.instance.mPoxyUrl =
+        proxyStr.isNotEmpty ? "PROXY $proxyStr" : "";
+  }
+}
+
+tbShowToast(String msg,
+    {ToastGravity? gravity,
+    Color? backgroundColor,
+    Color? textColor,
+    double? fontSize}) {
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: gravity ?? ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor:
+          backgroundColor ?? TbSystemConfig.instance.mSnackbarBackground,
+      textColor: textColor ?? TbSystemConfig.instance.mSnackbarTextColor,
+      fontSize: fontSize ?? 14.0.px);
+}

@@ -1,10 +1,9 @@
 part of flutter_library;
 
 /*state基类*/
-abstract class TbBaseView<T extends TbBaseLogic,
-        E extends TbBaseState, S extends StatefulWidget> extends State<S>
+abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState,
+        S extends StatefulWidget> extends State<S>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
-
   T? mLogic;
   E? mState;
   String? mLogicTag;
@@ -19,6 +18,7 @@ abstract class TbBaseView<T extends TbBaseLogic,
   @override
   void initState() {
     _initView();
+    TbAppTheme.setSystemUi();
     mState?.init();
     WidgetsBinding.instance
       ?..addObserver(this) //添加观察者
@@ -48,15 +48,7 @@ abstract class TbBaseView<T extends TbBaseLogic,
               int nowTime = DateTime.now().millisecondsSinceEpoch;
               if (nowTime - lastPopTime > 1500) {
                 lastPopTime = nowTime;
-                Fluttertoast.showToast(
-                    msg: 'exit_app'.tr,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor:
-                        TbSystemConfig.instance.mSnackbarBackground,
-                    textColor: TbSystemConfig.instance.mSnackbarTextColor,
-                    fontSize: 14.0);
+                tbShowToast('exit_app'.tr);
               } else {
                 // 退出app
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -78,7 +70,6 @@ abstract class TbBaseView<T extends TbBaseLogic,
     mState = state;
     mLogic?.setViewState(mState);
   }
-
 
   /*必须吃初始化调用setViewState方法*/
   void initViewState() {}
