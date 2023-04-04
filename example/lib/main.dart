@@ -1,10 +1,15 @@
 import 'package:example/constant/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_library/flutter_library.dart';
-import 'constant/api_config.dart';
+
 import 'view/splash/SplashAct.dart';
 
 void main() async{
+  await Get.putAsync<SharedPreferences>(() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs;
+  });
+  tbInitScreenDirect();
   tbInitProxy();
   runApp(MyApp());
   TbAppTheme.setSystemUi(navigationColor: Colors.black,brightness: Brightness.light);

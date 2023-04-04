@@ -166,3 +166,23 @@ tbShowToast(String msg,
       textColor: textColor ?? TbSystemConfig.instance.mSnackbarTextColor,
       fontSize: fontSize ?? 14.0.px);
 }
+
+/*初始化屏幕方向*/
+enum ScreenDirect { portrait, landscape }
+
+tbInitScreenDirect({ScreenDirect portrait = ScreenDirect.portrait}) {
+  WidgetsFlutterBinding.ensureInitialized(); //不加这个强制横/竖屏会报错
+  if (portrait == ScreenDirect.portrait) {
+    SystemChrome.setPreferredOrientations([
+      // 强制竖屏
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
+  } else {
+    SystemChrome.setPreferredOrientations([
+      // 强制横屏
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight
+    ]);
+  }
+}
