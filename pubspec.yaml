@@ -1,6 +1,6 @@
 name: flutter_library
 description: A new Flutter library.
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/MrTangBo/flutter_library
 
 environment:
@@ -22,7 +22,7 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   octo_image: ^1.0.0+1
   image_picker: ^0.8.3
-  fijkplayer: ^0.10.0
+#  fijkplayer: ^0.10.0
   wakelock: ^0.5.2
   top_snackbar_flutter: ^1.0.0
   flutter_svg: ^0.22.0

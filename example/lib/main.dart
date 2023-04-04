@@ -5,14 +5,14 @@ import 'package:flutter_library/flutter_library.dart';
 import 'view/splash/SplashAct.dart';
 
 void main() async{
+  runApp(MyApp());
+  tbInitScreenDirect();
+  tbInitProxy();
+  TbAppTheme.setSystemUi(navigationColor: Colors.black,brightness: Brightness.light);
   await Get.putAsync<SharedPreferences>(() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs;
   });
-  tbInitScreenDirect();
-  tbInitProxy();
-  runApp(MyApp());
-  TbAppTheme.setSystemUi(navigationColor: Colors.black,brightness: Brightness.light);
 }
 
 class MyApp extends StatelessWidget {
