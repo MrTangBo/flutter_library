@@ -38,7 +38,7 @@ export 'package:date_format/date_format.dart';
 export 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 export 'package:octo_image/octo_image.dart';
 export 'package:image_picker/image_picker.dart';
-export 'package:fijkplayer/fijkplayer.dart';
+// export 'package:fijkplayer/fijkplayer.dart';
 export 'package:wakelock/wakelock.dart';
 export 'package:top_snackbar_flutter/top_snack_bar.dart';
 export 'package:top_snackbar_flutter/custom_snack_bar.dart';

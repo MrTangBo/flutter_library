@@ -41,7 +41,9 @@ class TbAppTheme {
   static setSystemUi(
       {Color? statusColor,
       Color? navigationColor,
-      Brightness? brightness,
+      Color? navigationBarDividerColor,
+      Brightness? statusBrightness,
+      Brightness? navigationBrightness,
       bool isImmersed = false,
       bool mShowNavigationBar = true,
       bool isShowStatusBar = true}) {
@@ -60,7 +62,7 @@ class TbAppTheme {
             overlays: [SystemUiOverlay.bottom]);
       }
     }
-    var temp = brightness ?? TbSystemConfig.instance.brightness;
+    var temp = statusBrightness ?? TbSystemConfig.instance.statusBrightness;
     Brightness iosBrightness;
     if (temp == Brightness.light) {
       iosBrightness = Brightness.dark;
@@ -68,11 +70,10 @@ class TbAppTheme {
       iosBrightness = Brightness.light;
     }
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: navigationColor,
-      systemNavigationBarDividerColor:
-          navigationColor ?? TbSystemConfig.instance.mNavigationColor,
+      systemNavigationBarColor:  navigationColor ?? TbSystemConfig.instance.mNavigationColor,
+      systemNavigationBarDividerColor: navigationBarDividerColor ?? TbSystemConfig.instance.mNavigationBarDividerColor,
       statusBarColor: statusColor ?? TbSystemConfig.instance.mStatusBarColor,
-      systemNavigationBarIconBrightness: temp,
+      systemNavigationBarIconBrightness: navigationBrightness?? TbSystemConfig.instance.navigationBrightness,
       statusBarIconBrightness: temp,
       statusBarBrightness: iosBrightness,
     ));

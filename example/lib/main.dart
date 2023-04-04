@@ -8,7 +8,7 @@ void main() async{
   runApp(MyApp());
   tbInitScreenDirect();
   tbInitProxy();
-  TbAppTheme.setSystemUi(navigationColor: Colors.black,brightness: Brightness.light);
+  TbAppTheme.setSystemUi(navigationColor: Colors.black,statusBrightness: Brightness.dark);
   await Get.putAsync<SharedPreferences>(() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs;

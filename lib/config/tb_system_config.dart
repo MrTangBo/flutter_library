@@ -22,7 +22,9 @@ class TbSystemConfig {
 
   Color mStatusBarColor = Colors.transparent; //顶部状态栏颜色
   Color mNavigationColor = Colors.transparent; //底部状态栏颜色
-  Brightness brightness = Brightness.dark;
+  Brightness statusBrightness = Brightness.dark;
+  Brightness navigationBrightness = Brightness.dark;
+  Color mNavigationBarDividerColor = Colors.transparent;
   double mStandardSize = 750; //依赖标准尺寸
 
   Color mSnackbarBackground = Color(0x80000000);

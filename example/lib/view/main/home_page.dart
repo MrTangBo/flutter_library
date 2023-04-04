@@ -56,7 +56,7 @@ class _HomePageState extends TbBaseView<HomeLogic, HomeState, HomePage>
     ];
   }
 
-  final FijkPlayer player = FijkPlayer();
+  // final FijkPlayer player = FijkPlayer();
 
   @override
   void initState() {
@@ -67,15 +67,15 @@ class _HomePageState extends TbBaseView<HomeLogic, HomeState, HomePage>
   }
 
   void startPlay() async {
-    await player.setOption(FijkOption.hostCategory, "request-screen-on", 1);
-    await player.setOption(FijkOption.hostCategory, "request-audio-focus", 1);
-    await player
-        .setDataSource(
-            "https://video.pearvideo.com/mp4/adshort/20210804/cont-1737636-15737879_adpkg-ad_hd.mp4",
-            autoPlay: true)
-        .catchError((e) {
-      print("setDataSource error: $e");
-    });
+    // await player.setOption(FijkOption.hostCategory, "request-screen-on", 1);
+    // await player.setOption(FijkOption.hostCategory, "request-audio-focus", 1);
+    // await player
+    //     .setDataSource(
+    //         "https://video.pearvideo.com/mp4/adshort/20210804/cont-1737636-15737879_adpkg-ad_hd.mp4",
+    //         autoPlay: true)
+    //     .catchError((e) {
+    //   print("setDataSource error: $e");
+    // });
   }
 
   @override
