@@ -3,6 +3,7 @@ part of flutter_library;
 typedef QuestSuccess = Function(dynamic result, int taskId);
 typedef QuestError = Function(dynamic onError);
 typedef QuestFailed = Function(dynamic code, dynamic msg, int taskId);
+typedef ProgressCallback = void Function(int count, int total);
 
 class TbHttpUtils {
   factory TbHttpUtils() => _getInstance();
@@ -84,7 +85,8 @@ class TbHttpUtils {
     //信任所有证书
     (_mDio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => mTrustAllCertificate;
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => mTrustAllCertificate;
     };
 
     /*检测网络*/
@@ -193,6 +195,7 @@ class TbHttpUtils {
       QuestSuccess? onSuccess,
       QuestFailed? onFiled,
       QuestError? onError,
+      ProgressCallback? onSendProgress,
       bool isShowLoading = true,
       CancelToken? token}) async {
     mFirstIntoApp = false;
@@ -219,7 +222,8 @@ class TbHttpUtils {
           options: options,
           queryParameters: queryParameters,
           data: data,
-          cancelToken: token);
+          cancelToken: token,
+          onSendProgress: onSendProgress);
       if (isShowLoading) {
         EasyLoading.dismiss();
       }
