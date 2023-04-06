@@ -1,7 +1,6 @@
 library flutter_library;
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -26,6 +25,7 @@ import 'package:system_proxy/system_proxy.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+
 /*export*/
 export 'package:dio/dio.dart';
 export 'package:get/get.dart' hide Response, MultipartFile, FormData;
@@ -44,6 +44,7 @@ export 'package:top_snackbar_flutter/top_snack_bar.dart';
 export 'package:top_snackbar_flutter/custom_snack_bar.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:badges/badges.dart';
+export 'package:permission_handler/permission_handler.dart';
 
 /*base*/
 part './base/tb_base_logic.dart';
@@ -91,7 +92,6 @@ part './tb_tab_layout_widget/tb_tab_layout_widget_state.dart';
 part './tb_tab_layout_widget/tb_tab_layout_widget_view.dart';
 
 /*tbNavigation*/
-
 part './tb_bottom_navigation/tb_bottom_navigation_logic.dart';
 part './tb_bottom_navigation/tb_bottom_navigation_state.dart';
 part './tb_bottom_navigation/tb_bottom_navigation_view.dart';

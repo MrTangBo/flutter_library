@@ -1,6 +1,6 @@
 name: flutter_library
 description: A new Flutter library.
-version: 0.0.8
+version: 0.1.1
 homepage: https://github.com/MrTangBo/flutter_library
 
 environment:
@@ -29,6 +29,7 @@ dependencies:
   cached_network_image: ^3.1.0
   badges: ^2.0.2
   system_proxy: 0.1.0 #抓包代理插件
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:
