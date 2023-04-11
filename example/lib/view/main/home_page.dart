@@ -13,23 +13,17 @@ class HomeState extends TbBaseState {
 }
 
 class HomeLogic extends TbBaseLogic<HomeState> {
+
   getData() {
-    var data = {
-      "articleType": "1",
-      "typeId": "1",
-      "pageSize": "30",
-      "pageNo": "1"
-    };
-    questMix([
-      QuestListInfo(Api.getBannerType, QuestMethod.post, data: data),
-    ]);
+    get(
+      Api.idCardAnalysis,
+      onSuccess: (result, taskId) {},
+    );
   }
 
   @override
   resultData(result, int taskId) {
-    if (taskId == Api.getBannerType.taskId) {
-      mState?.bannerInfo = BannerInfo.fromJson(result);
-    }
+
   }
 
   @override

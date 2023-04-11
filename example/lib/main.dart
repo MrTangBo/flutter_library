@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
     TbHttpUtils.instance
       ..mErrorCodeHandle = (code, msg, taskId) {
         //统一处理各种ErrorCode
+        tbShowToast(msg);
       }
       ..init();
     return GetMaterialApp(

@@ -179,7 +179,8 @@ class TbHttpUtils {
         if (info.code != mSuccessCode) {
           onFiled(info.code, info.msg, taskId);
         }
-      } else {
+      }
+      if (info.code != mSuccessCode) {
         mErrorCodeHandle(info.code, info.msg, taskId);
       }
     } on DioError catch (e) {
@@ -241,7 +242,8 @@ class TbHttpUtils {
         if (info.code != mSuccessCode) {
           onFiled(info.code, info.msg, taskId);
         }
-      } else {
+      }
+      if (info.code != mSuccessCode) {
         mErrorCodeHandle(info.code, info.msg, taskId);
       }
     } on DioError catch (e) {
@@ -312,8 +314,9 @@ class TbHttpUtils {
           if (info.code != mSuccessCode) {
             onFiled(info.code, info.msg, questInfos[i].mapUrl.taskId);
           }
-        } else {
-          mErrorCodeHandle(info.code, info.msg, questInfos[i].mapUrl.taskId);
+        }
+        if (info.code != mSuccessCode) {
+          mErrorCodeHandle(info.code, info.msg,  questInfos[i].mapUrl.taskId);
         }
       }
     } on DioError catch (e) {
