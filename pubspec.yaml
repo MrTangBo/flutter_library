@@ -36,6 +36,7 @@ dependencies:
   marquee: ^2.2.3 #跑马灯
   url_launcher: ^6.1.10 #url跳转
   encrypt: ^5.0.1 #加密算法
+  flutter_pickers: ^2.1.9 #时间地址三级联动
 
 
 dev_dependencies:

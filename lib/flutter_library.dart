@@ -48,7 +48,6 @@ export 'package:package_info_plus/package_info_plus.dart';
 export 'package:flutter_xupdate/flutter_xupdate.dart';
 export 'package:wechat_kit/wechat_kit.dart';
 export 'package:alipay_kit/alipay_kit.dart';
-export 'package:encrypt/encrypt.dart';
 export 'package:marquee/marquee.dart';
 export 'package:url_launcher/url_launcher.dart';
 
