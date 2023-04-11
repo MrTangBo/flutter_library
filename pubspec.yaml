@@ -25,12 +25,17 @@ dependencies:
   wakelock: ^0.5.2
   top_snackbar_flutter: ^1.0.0
   flutter_svg: ^0.22.0
-  cached_network_image: ^3.1.0
-  badges: ^2.0.2
+  cached_network_image: ^3.2.3
+  badges: ^3.0.3
   system_proxy: 0.1.0 #抓包代理插件
   permission_handler: ^10.2.0
   package_info_plus: ^3.1.0
   flutter_xupdate: ^3.0.0
+  wechat_kit: ^5.0.3
+  alipay_kit: ^5.0.0
+  marquee: ^2.2.3 #跑马灯
+  url_launcher: ^6.1.10 #url跳转
+  encrypt: ^5.0.1 #加密算法
 
 
 dev_dependencies:
