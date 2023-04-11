@@ -38,13 +38,14 @@ export 'package:date_format/date_format.dart';
 export 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 export 'package:octo_image/octo_image.dart';
 export 'package:image_picker/image_picker.dart';
-// export 'package:fijkplayer/fijkplayer.dart';
 export 'package:wakelock/wakelock.dart';
 export 'package:top_snackbar_flutter/top_snack_bar.dart';
 export 'package:top_snackbar_flutter/custom_snack_bar.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:badges/badges.dart';
 export 'package:permission_handler/permission_handler.dart';
+export 'package:package_info_plus/package_info_plus.dart';
+export 'package:flutter_xupdate/flutter_xupdate.dart';
 
 /*base*/
 part './base/tb_base_logic.dart';

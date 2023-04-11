@@ -1,11 +1,11 @@
 name: flutter_library
 description: A new Flutter library.
-version: 0.1.1
+version: 1.0.0
 homepage: https://github.com/MrTangBo/flutter_library
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=2.11.0"
 
 dependencies:
   flutter:
@@ -22,7 +22,6 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   octo_image: ^1.0.0+1
   image_picker: ^0.8.3
-#  fijkplayer: ^0.10.0
   wakelock: ^0.5.2
   top_snackbar_flutter: ^1.0.0
   flutter_svg: ^0.22.0
@@ -30,6 +29,8 @@ dependencies:
   badges: ^2.0.2
   system_proxy: 0.1.0 #抓包代理插件
   permission_handler: ^10.2.0
+  package_info_plus: ^3.1.0
+  flutter_xupdate: ^3.0.0
 
 
 dev_dependencies:

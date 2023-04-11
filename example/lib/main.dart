@@ -4,6 +4,7 @@ import 'package:flutter_library/flutter_library.dart';
 
 import 'view/splash/SplashAct.dart';
 
+
 void main() async{
   runApp(MyApp());
   tbInitScreenDirect();
@@ -13,6 +14,14 @@ void main() async{
     final prefs = await SharedPreferences.getInstance();
     return prefs;
   });
+
+  PackageInfo packageInfo= await PackageInfo.fromPlatform();
+  String appName = packageInfo.appName;
+  String packageName = packageInfo.packageName;
+  String version = packageInfo.version;
+  String buildNumber = packageInfo.buildNumber;
+
+
 }
 
 class MyApp extends StatelessWidget {
