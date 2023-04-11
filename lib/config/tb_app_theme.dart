@@ -6,7 +6,7 @@ class TbAppTheme {
     scaffoldBackgroundColor: Colors.white,
     primaryColor: AppColors.color_161F2F,
     textTheme: TextTheme(
-      bodyText2: TextStyle(color: AppColors.color_2c355c, fontSize: 13.px),
+      bodyMedium: TextStyle(color: AppColors.color_2c355c, fontSize: 13.px)
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,

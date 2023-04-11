@@ -109,7 +109,9 @@ class _TbTabLayoutWidgetPageState extends TbBaseView<TbTabLayoutWidgetLogic,
   }
 
   @override
-  Widget build(BuildContext context) => buildWidget(context);
+  Widget build(BuildContext context) {
+    return buildWidget(context);
+  }
 
   @override
   Widget buildWidget(BuildContext context) {

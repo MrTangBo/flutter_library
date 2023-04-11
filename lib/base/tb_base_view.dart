@@ -21,7 +21,7 @@ abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState,
     TbAppTheme.setSystemUi();
     mState?.init();
     WidgetsBinding.instance
-      ?..addObserver(this) //添加观察者
+      ..addObserver(this) //添加观察者
       ..addPostFrameCallback((timeStamp) {
         if (!_mBuildComplete) {
           firstFrameComplete();
@@ -178,7 +178,7 @@ abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState,
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this); //销毁观察者
+    WidgetsBinding.instance.removeObserver(this); //销毁观察者
     TbSystemConfig.instance.routeObserver.unsubscribe(this); //取消订阅
     super.dispose();
   }
