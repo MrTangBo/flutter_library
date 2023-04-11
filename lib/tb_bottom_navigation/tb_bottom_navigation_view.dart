@@ -20,28 +20,33 @@ class TbBottomNavigationWidget extends StatefulWidget {
   final bool wantKeepAlive;
   final bool showSelectedLabels;
   final bool showUnselectedLabels;
-  final  Function(int)? pageSelect;
+  final Function(int)? pageSelect;
+  final TextStyle? selectedLabelStyle;
+  final TextStyle? unselectedLabelStyle;
 
-  TbBottomNavigationWidget({Key? key,
-    this.builderPage,
-    this.physics,
-    this.animateToPage = true,
-    this.bottomNavigationBarBgColor,
-    this.pages,
-    this.titles,
-    this.selectIconSize,
-    this.unSelectIconSize,
-    this.bottomNavigationBarTheme,
-    this.iconPath,
-    this.bottomNavigationBarHeight,
-    this.pageDuration,
-    this.margin,
-    this.padding,
-    this.decoration,
-    this.wantKeepAlive = true,
-    this.showSelectedLabels = true,
-    this.pageSelect,
-    this.showUnselectedLabels = true})
+  TbBottomNavigationWidget(
+      {Key? key,
+      this.builderPage,
+      this.physics,
+      this.animateToPage = true,
+      this.bottomNavigationBarBgColor,
+      this.pages,
+      this.titles,
+      this.selectIconSize,
+      this.unSelectIconSize,
+      this.bottomNavigationBarTheme,
+      this.iconPath,
+      this.bottomNavigationBarHeight,
+      this.pageDuration,
+      this.margin,
+      this.padding,
+      this.decoration,
+      this.wantKeepAlive = true,
+      this.showSelectedLabels = true,
+      this.pageSelect,
+      this.showUnselectedLabels = true,
+      this.selectedLabelStyle,
+      this.unselectedLabelStyle})
       : super(key: key);
 
   @override
@@ -49,8 +54,7 @@ class TbBottomNavigationWidget extends StatefulWidget {
 }
 
 class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
-    TbBottomNavigationState,
-    TbBottomNavigationWidget> {
+    TbBottomNavigationState, TbBottomNavigationWidget> {
   @override
   Widget build(BuildContext context) => buildWidget(context);
 
@@ -59,11 +63,9 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
   @override
   void initViewState() {
     super.initViewState();
-    tag = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
-    setViewState(TbBottomNavigationLogic(), TbBottomNavigationState(), logicTag: tag);
+    tag = DateTime.now().millisecondsSinceEpoch.toString();
+    setViewState(TbBottomNavigationLogic(), TbBottomNavigationState(),
+        logicTag: tag);
   }
 
   @override
@@ -107,32 +109,44 @@ class _TbBottomNavigationPageState extends TbBaseView<TbBottomNavigationLogic,
           children: [
             Expanded(
                 child: PageView.builder(
-                  physics: widget.physics,
-                  itemBuilder: (_, index) {
-                    return widget.pages![index];
-                  },
-                  onPageChanged: (index) {
-                    mState!.mCurrentIndex = index;
-                    mLogic?.update(["TbBottomNavigationWidget"]);
-                    widget.pageSelect?.call(index);
-                  },
-                  controller: mState!.mController,
-                  itemCount: widget.pages!.length,
-                )),
+              physics: widget.physics,
+              itemBuilder: (_, index) {
+                return widget.pages![index];
+              },
+              onPageChanged: (index) {
+                mState!.mCurrentIndex = index;
+                mLogic?.update(["TbBottomNavigationWidget"]);
+                widget.pageSelect?.call(index);
+              },
+              controller: mState!.mController,
+              itemCount: widget.pages!.length,
+            )),
             Theme(
-              data: TbAppTheme.mThemeData.copyWith(bottomNavigationBarTheme: widget.bottomNavigationBarTheme),
+              data: TbAppTheme.mThemeData.copyWith(
+                  bottomNavigationBarTheme: widget.bottomNavigationBarTheme),
               child: Container(
                 margin: widget.margin,
                 padding: widget.padding,
                 decoration: widget.decoration,
                 height: widget.bottomNavigationBarHeight,
                 child: BottomNavigationBar(
-                    backgroundColor: widget.bottomNavigationBarBgColor ?? Theme.of(context).primaryColor,
+                    backgroundColor: widget.bottomNavigationBarBgColor ??
+                        Theme.of(context).primaryColor,
                     elevation: 0,
                     items: mState!.mBottomTabList,
                     showSelectedLabels: widget.showSelectedLabels,
                     showUnselectedLabels: widget.showUnselectedLabels,
                     currentIndex: mState!.mCurrentIndex,
+                    selectedLabelStyle:widget.selectedLabelStyle?? TextStyle(
+                      fontSize: 12.px,
+                      height: 2,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    unselectedLabelStyle:widget.unselectedLabelStyle?? TextStyle(
+                      fontSize: 12.px,
+                      height: 2,
+                      fontWeight: FontWeight.w500,
+                    ),
                     onTap: (index) {
                       mState!.mCurrentIndex = index;
                       widget.pageSelect?.call(index);

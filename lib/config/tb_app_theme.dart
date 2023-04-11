@@ -17,16 +17,6 @@ class TbAppTheme {
       selectedItemColor: AppColors.color_2A6AE7,
       elevation: 0,
       type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: TextStyle(
-        fontSize: 12.px,
-        height: 2,
-        fontWeight: FontWeight.w500,
-      ),
-      unselectedLabelStyle: TextStyle(
-        fontSize: 12.px,
-        height: 2,
-        fontWeight: FontWeight.w500,
-      ),
       unselectedItemColor: AppColors.color_CFD2E7,
     ),
     highlightColor: Colors.transparent,

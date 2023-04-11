@@ -42,6 +42,8 @@ class _RoutePageState extends State<MainAct> {
     return Scaffold(
       body: TbBottomNavigationWidget(
         pages: _mPage,
+
+
         titles: _bottomNames.values.toList(),
         iconPath: _bottomNavigationBar(),
       ),

@@ -12,3 +12,12 @@ multiple Flutter or Dart projects.
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.dev/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+
+# run
+flutter run --release --no-sound-null-safety
+
+
+# build
+flutter build apk --release --no-sound-null-safety
+flutter build apk --debug --no-sound-null-safety 
