@@ -63,9 +63,9 @@ class TbClassicalHeader extends Header {
     this.noMoreText,
     this.showInfo: true,
     this.infoText,
-    this.bgColor: Colors.transparent,
-    this.textColor: Colors.black,
-    this.infoColor: Colors.teal,
+    this.bgColor= Colors.transparent,
+    this.textColor= Colors.black,
+    this.infoColor= Colors.teal,
     this.infoTxSize,
     this.textSize,
   }) : super(
