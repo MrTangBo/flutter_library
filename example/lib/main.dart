@@ -21,6 +21,12 @@ void main() async{
   String version = packageInfo.version;
   String buildNumber = packageInfo.buildNumber;
 
+  TbHttpUtils.instance
+    ..mErrorCodeHandle = (code, msg, taskId) {
+      //统一处理各种ErrorCode
+      tbShowToast(msg);
+    }
+    ..init();
 
 }
 
@@ -29,12 +35,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TbHttpUtils.instance
-      ..mErrorCodeHandle = (code, msg, taskId) {
-        //统一处理各种ErrorCode
-        tbShowToast(msg);
-      }
-      ..init();
     return GetMaterialApp(
       translations: TbBaseGlobalization(),
       // 将会按照此处指定的语言翻译

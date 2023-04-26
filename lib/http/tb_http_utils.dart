@@ -23,6 +23,7 @@ class TbHttpUtils {
 
   /*初始化dio*/
   Dio _mDio = Dio();
+
   dynamic mSuccessCode = "200"; //请求成功状态码
   List jsonKey = ["code", "data", "msg"];
   String mContentType = "application/json";
@@ -34,15 +35,13 @@ class TbHttpUtils {
   Map<String, dynamic> mHeader = {};
   List<Interceptor> mInterceptors = []; //自定义拦截器
   Function mLoadingView = () {
-    EasyLoading.show(
-        status: "loading".tr, maskType: EasyLoadingMaskType.custom);
+    EasyLoading.show(status: "loading".tr, maskType: EasyLoadingMaskType.custom);
   }; //加载进度框
-  Transformer mTransformer = DefaultTransformer(); // 自定义 jsonDecodeCallback
+  Transformer mTransformer = BackgroundTransformer(); // 自定义 jsonDecodeCallback
 
   ConnectivityResult? _mNetWorkStatus; //当前网络状态
 
-  Function(ConnectivityResult? mNetWorkStatus) mNetWorkHandle =
-      (_) {}; //不同网络状态处理
+  Function(ConnectivityResult? mNetWorkStatus) mNetWorkHandle = (_) {}; //不同网络状态处理
   bool mFirstIntoApp = true; //是否首次进去app(防止进去App去执行无网络的操作，正常情况应该发起请求时执行)
 
   List<QuestRepeatListInfo> mRepeatQuests = []; //断线重连配置
@@ -53,12 +52,7 @@ class TbHttpUtils {
 
   init() {
     _mDio
-      ..options = BaseOptions(
-          contentType: mContentType,
-          receiveTimeout: mReceiveTimeout,
-          sendTimeout: mSendTimeout,
-          connectTimeout: mConnectTimeout,
-          headers: mHeader)
+      ..options = BaseOptions(contentType: mContentType, receiveTimeout: Duration(milliseconds: mReceiveTimeout), sendTimeout: Duration(milliseconds: mSendTimeout), connectTimeout: Duration(milliseconds: mConnectTimeout), headers: mHeader)
       ..transformer = mTransformer
       ..interceptors.addAll(mInterceptors)
       //请求拦截器和获取数据拦截器
@@ -73,21 +67,7 @@ class TbHttpUtils {
           },
         ),
       );
-    //debug模式允许抓包(设置代理)
-    if (kDebugMode && mPoxyUrl.isNotEmpty) {
-      (_mDio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-          (client) {
-        client.findProxy = (uri) {
-          return "PROXY $mPoxyUrl";
-        };
-      };
-    }
-    //信任所有证书
-    (_mDio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => mTrustAllCertificate;
-    };
+    _setProxy();
 
     /*检测网络*/
     Connectivity()
@@ -101,25 +81,11 @@ class TbHttpUtils {
         if (_mNetWorkStatus != ConnectivityResult.none) {
           mRepeatQuests.forEach((quest) {
             if (quest.questMethod == QuestMethod.post) {
-              post(quest.url!, quest.taskId!,
-                  data: quest.data,
-                  queryParameters: quest.queryParameters,
-                  options: quest.options,
-                  onSuccess: quest.onSuccess,
-                  onFiled: quest.onFiled,
-                  onError: quest.onError);
+              post(quest.url!, quest.taskId!, data: quest.data, queryParameters: quest.queryParameters, options: quest.options, onSuccess: quest.onSuccess, onFiled: quest.onFiled, onError: quest.onError);
             } else if (quest.questMethod == QuestMethod.get) {
-              get(quest.url!, quest.taskId!,
-                  queryParameters: quest.queryParameters,
-                  options: quest.options,
-                  onSuccess: quest.onSuccess,
-                  onFiled: quest.onFiled,
-                  onError: quest.onError);
+              get(quest.url!, quest.taskId!, queryParameters: quest.queryParameters, options: quest.options, onSuccess: quest.onSuccess, onFiled: quest.onFiled, onError: quest.onError);
             } else {
-              questMix(quest.questListInfos!,
-                  onSuccess: quest.onMultipleSuccess,
-                  onFiled: quest.onMultipleFiled,
-                  onError: quest.onError);
+              questMix(quest.questListInfos!, onSuccess: quest.onMultipleSuccess, onFiled: quest.onMultipleFiled, onError: quest.onError);
             }
           });
         }
@@ -131,37 +97,18 @@ class TbHttpUtils {
   }
 
 /*单get请求*/
-  get(String url, int taskId,
-      {Map<String, dynamic>? queryParameters,
-      Options? options,
-      QuestSuccess? onSuccess,
-      QuestError? onError,
-      QuestFailed? onFiled,
-      bool isShowLoading = true,
-      CancelToken? token}) async {
+  get(String url, int taskId, {Map<String, dynamic>? queryParameters, Options? options, QuestSuccess? onSuccess, QuestError? onError, QuestFailed? onFiled, bool isShowLoading = true, CancelToken? token}) async {
     /*无网络不请求*/
     mFirstIntoApp = false;
     if (_mNetWorkStatus == ConnectivityResult.none) {
-      if (mRepeatQuests.where((element) => element.taskId == taskId).length !=
-          0) return;
-      mRepeatQuests.add(QuestRepeatListInfo(
-          url: url,
-          questMethod: QuestMethod.get,
-          queryParameters: queryParameters,
-          options: options,
-          taskId: taskId,
-          onSuccess: onSuccess,
-          onError: onError,
-          onFiled: onFiled));
+      if (mRepeatQuests.where((element) => element.taskId == taskId).length != 0) return;
+      mRepeatQuests.add(QuestRepeatListInfo(url: url, questMethod: QuestMethod.get, queryParameters: queryParameters, options: options, taskId: taskId, onSuccess: onSuccess, onError: onError, onFiled: onFiled));
       mNetWorkHandle(_mNetWorkStatus);
       return;
     }
     try {
       _showLoading(isShowLoading);
-      var result = await _mDio.get(url,
-          queryParameters: queryParameters,
-          options: options,
-          cancelToken: token);
+      var result = await _mDio.get(url, queryParameters: queryParameters, options: options, cancelToken: token);
       mRepeatQuests.removeWhere((element) => taskId == element.taskId);
       if (isShowLoading) {
         EasyLoading.dismiss();
@@ -189,42 +136,18 @@ class TbHttpUtils {
   }
 
 /*单post请求*/
-  post(String url, int taskId,
-      {dynamic data,
-      Map<String, dynamic>? queryParameters,
-      Options? options,
-      QuestSuccess? onSuccess,
-      QuestFailed? onFiled,
-      QuestError? onError,
-      ProgressCallback? onSendProgress,
-      bool isShowLoading = true,
-      CancelToken? token}) async {
+  post(String url, int taskId, {dynamic data, Map<String, dynamic>? queryParameters, Options? options, QuestSuccess? onSuccess, QuestFailed? onFiled, QuestError? onError, ProgressCallback? onSendProgress, bool isShowLoading = true, CancelToken? token}) async {
     mFirstIntoApp = false;
     /*无网络不请求*/
     if (_mNetWorkStatus == ConnectivityResult.none) {
-      if (mRepeatQuests.where((element) => element.taskId == taskId).length !=
-          0) return;
-      mRepeatQuests.add(QuestRepeatListInfo(
-          url: url,
-          questMethod: QuestMethod.post,
-          data: data,
-          taskId: taskId,
-          queryParameters: queryParameters,
-          options: options,
-          onSuccess: onSuccess,
-          onError: onError,
-          onFiled: onFiled));
+      if (mRepeatQuests.where((element) => element.taskId == taskId).length != 0) return;
+      mRepeatQuests.add(QuestRepeatListInfo(url: url, questMethod: QuestMethod.post, data: data, taskId: taskId, queryParameters: queryParameters, options: options, onSuccess: onSuccess, onError: onError, onFiled: onFiled));
       mNetWorkHandle(_mNetWorkStatus);
       return;
     }
     try {
       _showLoading(isShowLoading);
-      var result = await _mDio.post(url,
-          options: options,
-          queryParameters: queryParameters,
-          data: data,
-          cancelToken: token,
-          onSendProgress: onSendProgress);
+      var result = await _mDio.post(url, options: options, queryParameters: queryParameters, data: data, cancelToken: token, onSendProgress: onSendProgress);
       if (isShowLoading) {
         EasyLoading.dismiss();
       }
@@ -252,11 +175,7 @@ class TbHttpUtils {
   }
 
   /*并行请求*/
-  questMix(List<QuestListInfo> questInfos,
-      {QuestSuccess? onSuccess,
-      QuestFailed? onFiled,
-      QuestError? onError,
-      bool isShowLoading = true}) async {
+  questMix(List<QuestListInfo> questInfos, {QuestSuccess? onSuccess, QuestFailed? onFiled, QuestError? onError, bool isShowLoading = true}) async {
     /*无网络不请求*/
     mFirstIntoApp = false;
     var mTaskIdMix = "";
@@ -264,17 +183,8 @@ class TbHttpUtils {
       mTaskIdMix += "${element.mapUrl.url}";
     });
     if (_mNetWorkStatus == ConnectivityResult.none) {
-      if (mRepeatQuests
-              .where((element) => element.taskIdMix == mTaskIdMix)
-              .length !=
-          0) return;
-      mRepeatQuests.add(QuestRepeatListInfo(
-          questMethod: QuestMethod.mix,
-          questListInfos: questInfos,
-          onMultipleSuccess: onSuccess,
-          onError: onError,
-          taskIdMix: mTaskIdMix,
-          onMultipleFiled: onFiled));
+      if (mRepeatQuests.where((element) => element.taskIdMix == mTaskIdMix).length != 0) return;
+      mRepeatQuests.add(QuestRepeatListInfo(questMethod: QuestMethod.mix, questListInfos: questInfos, onMultipleSuccess: onSuccess, onError: onError, taskIdMix: mTaskIdMix, onMultipleFiled: onFiled));
       mNetWorkHandle(_mNetWorkStatus);
       return;
     }
@@ -283,16 +193,9 @@ class TbHttpUtils {
     try {
       questInfos.forEach((element) {
         if (element.questMethod == QuestMethod.post) {
-          questList.add(_mDio.post(element.mapUrl.url,
-              options: element.options,
-              queryParameters: element.queryParameters,
-              data: element.data,
-              cancelToken: element.cancelToken));
+          questList.add(_mDio.post(element.mapUrl.url, options: element.options, queryParameters: element.queryParameters, data: element.data, cancelToken: element.cancelToken));
         } else if (element.questMethod == QuestMethod.get) {
-          questList.add(_mDio.get(element.mapUrl.url,
-              queryParameters: element.queryParameters,
-              options: element.options,
-              cancelToken: element.cancelToken));
+          questList.add(_mDio.get(element.mapUrl.url, queryParameters: element.queryParameters, options: element.options, cancelToken: element.cancelToken));
         }
       });
       final result = await Future.wait(questList);
@@ -316,7 +219,7 @@ class TbHttpUtils {
           }
         }
         if (info.code != mSuccessCode) {
-          mErrorCodeHandle(info.code, info.msg,  questInfos[i].mapUrl.taskId);
+          mErrorCodeHandle(info.code, info.msg, questInfos[i].mapUrl.taskId);
         }
       }
     } on DioError catch (e) {
@@ -326,43 +229,28 @@ class TbHttpUtils {
 
   _showError(DioError e) {
     switch (e.type) {
-      case DioErrorType.connectTimeout:
+      case DioErrorType.connectionTimeout:
       case DioErrorType.sendTimeout:
       case DioErrorType.receiveTimeout:
         {
-          Fluttertoast.showToast(
-              msg: "internet_time_out".tr,
-              backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              textColor: TbSystemConfig.instance.mSnackbarTextColor);
+          Fluttertoast.showToast(msg: "internet_time_out".tr, backgroundColor: TbSystemConfig.instance.mSnackbarBackground, textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
 
-      case DioErrorType.response:
+      case DioErrorType.badResponse:
         {
-          Fluttertoast.showToast(
-              msg: "internet_error".tr,
-              toastLength: Toast.LENGTH_LONG,
-              backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              textColor: TbSystemConfig.instance.mSnackbarTextColor);
+          Fluttertoast.showToast(msg: "internet_error".tr, toastLength: Toast.LENGTH_LONG, backgroundColor: TbSystemConfig.instance.mSnackbarBackground, textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
 
-      case DioErrorType.other:
+      case DioErrorType.unknown:
         {
-          Fluttertoast.showToast(
-              msg: "internet_unKnow".tr,
-              toastLength: Toast.LENGTH_LONG,
-              backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              textColor: TbSystemConfig.instance.mSnackbarTextColor);
+          Fluttertoast.showToast(msg: "internet_unKnow".tr, toastLength: Toast.LENGTH_LONG, backgroundColor: TbSystemConfig.instance.mSnackbarBackground, textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
       default:
         {
-          Fluttertoast.showToast(
-              msg: "internet_unKnow".tr,
-              toastLength: Toast.LENGTH_LONG,
-              backgroundColor: TbSystemConfig.instance.mSnackbarBackground,
-              textColor: TbSystemConfig.instance.mSnackbarTextColor);
+          Fluttertoast.showToast(msg: "internet_unKnow".tr, toastLength: Toast.LENGTH_LONG, backgroundColor: TbSystemConfig.instance.mSnackbarBackground, textColor: TbSystemConfig.instance.mSnackbarTextColor);
         }
         break;
     }
@@ -390,5 +278,23 @@ class TbHttpUtils {
         _showError(e);
       }
     }
+  }
+
+  /*设置代理*/
+  _setProxy() {
+    _mDio.httpClientAdapter = IOHttpClientAdapter(
+      onHttpClientCreate: (client) {
+        if (kDebugMode && mPoxyUrl.isNotEmpty) {
+          client.findProxy = (uri) {
+            // 将请求代理至 localhost:8888。
+            // 请注意，代理会在你正在运行应用的设备上生效，而不是在宿主平台生效。
+            return mPoxyUrl;
+          };
+        }
+        //信任所有证书
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) => mTrustAllCertificate;
+        return client;
+      },
+    );
   }
 }
