@@ -1,9 +1,7 @@
 part of flutter_library;
 
 /*state基类*/
-abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState,
-        S extends StatefulWidget> extends State<S>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
+abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState, S extends StatefulWidget> extends State<S> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver, RouteAware {
   T? mLogic;
   E? mState;
   String? mLogicTag;
@@ -35,7 +33,12 @@ abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState,
   Widget build(BuildContext context) {
     super.build(context);
     return WillPopScope(
-      child: buildWidget(context),
+      child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: buildWidget(context)),
       onWillPop: !mShowExitTips
           ? null
           : () async {
@@ -171,8 +174,7 @@ abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState,
 
   @override
   void didChangeDependencies() {
-    TbSystemConfig.instance.routeObserver
-        .subscribe(this, ModalRoute.of(context)!); //订阅
+    TbSystemConfig.instance.routeObserver.subscribe(this, ModalRoute.of(context)!); //订阅
     super.didChangeDependencies();
   }
 

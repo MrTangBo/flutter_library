@@ -300,15 +300,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.1"
-  flutter_page_indicator:
-    dependency: transitive
-    description:
-      name: flutter_page_indicator
-      sha256: a5b2992228c2827b69faed3977681a3f5c313c7f13d72272decbb2923d1d7176
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
+    version: "1.0.2"
   flutter_pickers:
     dependency: transitive
     description:
@@ -341,14 +333,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.22.0"
-  flutter_swiper:
+  flutter_swiper_null_safety:
     dependency: transitive
     description:
-      name: flutter_swiper
-      sha256: e52a0e894abfa4099a5d4e5098a00597f3b55e25617cdd19e6fe6be5d24858c7
+      name: flutter_swiper_null_safety
+      sha256: "5a855e0080d035c08e82f8b7fd2f106344943a30c9ab483b2584860a2f22eaaf"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.6"
+    version: "1.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -844,14 +836,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  transformer_page_view:
-    dependency: transitive
-    description:
-      name: transformer_page_view
-      sha256: "2210531bc4148831061c575070173f32693415be8bbbf5bd2159a38f2adff61c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.6"
   typed_data:
     dependency: transitive
     description:

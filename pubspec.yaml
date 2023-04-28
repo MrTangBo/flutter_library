@@ -1,6 +1,6 @@
 name: flutter_library
 description: A new Flutter library.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/MrTangBo/flutter_library
 
 environment:
@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   dio: ^5.1.1
   flutter_easyrefresh: ^2.2.1
-  flutter_swiper: ^1.1.6 #轮播图
+#  flutter_swiper: ^1.1.6 #轮播图
+  flutter_swiper_null_safety: ^1.0.2
   get: ^4.3.8
   shared_preferences: ^2.0.6
   connectivity_plus: ^1.0.6
