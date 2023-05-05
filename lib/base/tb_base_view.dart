@@ -182,6 +182,7 @@ abstract class TbBaseView<T extends TbBaseLogic, E extends TbBaseState, S extend
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); //销毁观察者
     TbSystemConfig.instance.routeObserver.unsubscribe(this); //取消订阅
+    mLogic?.dispose();
     super.dispose();
   }
 }

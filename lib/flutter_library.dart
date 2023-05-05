@@ -51,6 +51,7 @@ export 'package:alipay_kit/alipay_kit.dart';
 export 'package:marquee/marquee.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+export 'package:flutter_pickers/pickers.dart';
 
 
 /*base*/
