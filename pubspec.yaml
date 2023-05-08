@@ -1,6 +1,6 @@
 name: flutter_library
 description: A new Flutter library.
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/MrTangBo/flutter_library
 
 environment:
@@ -32,8 +32,6 @@ dependencies:
   permission_handler: ^10.2.0
   package_info_plus: ^3.1.0
   flutter_xupdate: ^3.0.0
-  wechat_kit: ^5.0.3
-  alipay_kit: ^5.0.0
   marquee: ^2.2.3 #跑马灯
   url_launcher: ^6.1.10 #url跳转
   encrypt: ^5.0.1 #加密算法

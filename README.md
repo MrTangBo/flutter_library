@@ -21,3 +21,6 @@ flutter run --release --no-sound-null-safety
 # build
 flutter build apk --release --no-sound-null-safety
 flutter build apk --debug --no-sound-null-safety 
+
+#pub 
+flutter packages pub publish
