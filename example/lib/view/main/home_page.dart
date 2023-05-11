@@ -15,10 +15,11 @@ class HomeState extends TbBaseState {
 class HomeLogic extends TbBaseLogic<HomeState> {
 
   getData() {
-    get(
-      Api.idCardAnalysis,
-      onSuccess: (result, taskId) {},
-    );
+    post(Api.getCarList, data: {
+      "licensePlate": "",
+      "size": "10",
+      "current": mPage,
+    });
   }
 
   @override
@@ -28,7 +29,6 @@ class HomeLogic extends TbBaseLogic<HomeState> {
 
   @override
   void tbRefreshQuest() {
-    // TODO: implement tbRefreshQuest
     super.tbRefreshQuest();
     getData();
   }

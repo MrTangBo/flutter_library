@@ -18,7 +18,6 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
     this.mState = state;
   }
 
-
   /*下拉刷新*/
   void onRefresh() {
     mPage = 1;
@@ -40,83 +39,74 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   void tbRefreshQuest() {}
 
   /*post请求*/
-  post(Map<int,String> mapUrl,
-      {dynamic data,
-      Map<String, dynamic>? queryParameters,
-      Options? options,
-      QuestSuccess? onSuccess,
-      QuestFailed? onFiled,
-      QuestError? onError}) async {
+  post(Map<int, String> mapUrl, {dynamic data, Map<String, dynamic>? queryParameters, Options? options, QuestSuccess? onSuccess, QuestFailed? onFiled, QuestError? onError}) async {
     TbHttpUtils.instance.post(mapUrl.url, mapUrl.taskId,
         data: data,
         queryParameters: queryParameters,
         token: token,
-        options: options, onSuccess: (result, taskId) {
-      mState?.mQuestStatus = QuestStatus.ok;
-      if (_isLoadMore) {
-        mState?.mRefreshController.finishLoad(success: true);
-      }
-      if (_isRefresh) {
-        mState?.mRefreshController.finishRefresh(success: true);
-      }
-      resultData(result, taskId);
-      update();
-    },
+        options: options,
+        onSuccess: onSuccess ??
+            (result, taskId) {
+              mState?.mQuestStatus = QuestStatus.ok;
+              if (_isLoadMore) {
+                mState?.mRefreshController.finishLoad(success: true);
+              }
+              if (_isRefresh) {
+                mState?.mRefreshController.finishRefresh(success: true);
+              }
+              resultData(result, taskId);
+              update();
+            },
         onFiled: onFiled ?? failedHandle,
         onError: onError ?? errorHandle,
         isShowLoading: mIsShowLoading);
   }
 
   /*get请求*/
-  get(Map<int,String> mapUrl,
-      {Map<String, dynamic>? queryParameters,
-      Options? options,
-      QuestSuccess? onSuccess,
-      QuestError? onError,
-      QuestFailed? onFiled}) async {
+  get(Map<int, String> mapUrl, {Map<String, dynamic>? queryParameters, Options? options, QuestSuccess? onSuccess, QuestError? onError, QuestFailed? onFiled}) async {
     TbHttpUtils.instance.get(mapUrl.url, mapUrl.taskId,
         queryParameters: queryParameters,
         token: token,
-        options: options, onSuccess: (result, taskId) {
-      mState?.mQuestStatus = QuestStatus.ok;
-      if (_isLoadMore) {
-        mState?.mRefreshController.finishLoad(success: true);
-      }
-      if (_isRefresh) {
-        mState?.mRefreshController.finishRefresh(success: true);
-      }
-      resultData(result, taskId);
-      update();
-    },
+        options: options,
+        onSuccess: onSuccess ??
+            (result, taskId) {
+              mState?.mQuestStatus = QuestStatus.ok;
+              if (_isLoadMore) {
+                mState?.mRefreshController.finishLoad(success: true);
+              }
+              if (_isRefresh) {
+                mState?.mRefreshController.finishRefresh(success: true);
+              }
+              resultData(result, taskId);
+              update();
+            },
         onFiled: onFiled ?? failedHandle,
         onError: onError ?? errorHandle,
         isShowLoading: mIsShowLoading);
   }
 
   /*混合请求*/
-  questMix(List<QuestListInfo> questInfos,
-      {QuestSuccess? onSuccess,
-      QuestFailed? onFiled,
-      QuestError? onError,
-      bool updateAll = true}) async {
+  questMix(List<QuestListInfo> questInfos, {QuestSuccess? onSuccess, QuestFailed? onFiled, QuestError? onError, bool updateAll = true}) async {
     questInfos.forEach((element) {
       element.cancelToken = token;
     });
-    TbHttpUtils.instance.questMix(questInfos, onSuccess: (result, taskId) {
-      mState?.mQuestStatus = QuestStatus.ok;
-      if (_isLoadMore) {
-        mState?.mRefreshController.finishLoad(success: true);
-      }
-      if (_isRefresh) {
-        mState?.mRefreshController.finishRefresh(success: true);
-      }
-      resultData(result, taskId);
-      if (updateAll) {
-        update();
-      } else {
-        update([taskId]);
-      }
-    },
+    TbHttpUtils.instance.questMix(questInfos,
+        onSuccess: onSuccess ??
+            (result, taskId) {
+              mState?.mQuestStatus = QuestStatus.ok;
+              if (_isLoadMore) {
+                mState?.mRefreshController.finishLoad(success: true);
+              }
+              if (_isRefresh) {
+                mState?.mRefreshController.finishRefresh(success: true);
+              }
+              resultData(result, taskId);
+              if (updateAll) {
+                update();
+              } else {
+                update([taskId]);
+              }
+            },
         onFiled: onFiled ?? failedHandle,
         onError: onError ?? errorHandle,
         isShowLoading: mIsShowLoading);
@@ -129,10 +119,10 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   failedHandle(dynamic code, dynamic msg, int taskId) {
     mState?.mQuestStatus = QuestStatus.failed;
     if (_isLoadMore) {
-      mState?.mRefreshController.finishLoad(success: true);
+      mState?.mRefreshController.finishLoad(success: false);
     }
     if (_isRefresh) {
-      mState?.mRefreshController.finishRefresh(success: true);
+      mState?.mRefreshController.finishRefresh(success: false);
     }
     if (_isLoadMore) {
       mPage--;
@@ -149,10 +139,10 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
     }
     mState?.mQuestStatus = QuestStatus.error;
     if (_isLoadMore) {
-      mState?.mRefreshController.finishLoad(success: true);
+      mState?.mRefreshController.finishLoad(success: false);
     }
     if (_isRefresh) {
-      mState?.mRefreshController.finishRefresh(success: true);
+      mState?.mRefreshController.finishRefresh(success: false);
     }
     _isLoadMore = false;
     _isRefresh = false;
@@ -161,8 +151,7 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
 
   void onBackHome() {}
 
-  void onResume() {
-  }
+  void onResume() {}
 
   void onPause() {}
 

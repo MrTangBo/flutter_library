@@ -267,10 +267,6 @@ class TbHttpUtils {
     if (isShowLoading) {
       EasyLoading.dismiss();
     }
-    mRepeatQuests.clear();
-    if (kDebugMode) {
-      log("error-->${e.message}");
-    }
     if (onError != null) {
       onError(e);
     } else {
@@ -278,6 +274,11 @@ class TbHttpUtils {
         _showError(e);
       }
     }
+    mRepeatQuests.clear();
+    if (kDebugMode) {
+      log("error-->${e.message}");
+    }
+
   }
 
   /*设置代理*/
