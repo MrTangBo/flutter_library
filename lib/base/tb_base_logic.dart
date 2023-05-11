@@ -9,8 +9,8 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   T? mState;
   String? mLogicTag;
 
-  bool _isRefresh = false;
-  bool _isLoadMore = false;
+  bool isRefresh = false;
+  bool isLoadMore = false;
 
   CancelToken token = CancelToken();
 
@@ -21,8 +21,8 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   /*下拉刷新*/
   void onRefresh() {
     mPage = 1;
-    _isRefresh = true;
-    _isLoadMore = false;
+    isRefresh = true;
+    isLoadMore = false;
     mIsShowLoading = false;
     tbRefreshQuest();
   }
@@ -30,8 +30,8 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   /*上拉加载*/
   void onLoadMore() {
     mPage++;
-    _isRefresh = false;
-    _isLoadMore = true;
+    isRefresh = false;
+    isLoadMore = true;
     mIsShowLoading = false;
     tbRefreshQuest();
   }
@@ -48,10 +48,10 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
         onSuccess: onSuccess ??
             (result, taskId) {
               mState?.mQuestStatus = QuestStatus.ok;
-              if (_isLoadMore) {
+              if (isLoadMore) {
                 mState?.mRefreshController.finishLoad(success: true);
               }
-              if (_isRefresh) {
+              if (isRefresh) {
                 mState?.mRefreshController.finishRefresh(success: true);
               }
               resultData(result, taskId);
@@ -71,10 +71,10 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
         onSuccess: onSuccess ??
             (result, taskId) {
               mState?.mQuestStatus = QuestStatus.ok;
-              if (_isLoadMore) {
+              if (isLoadMore) {
                 mState?.mRefreshController.finishLoad(success: true);
               }
-              if (_isRefresh) {
+              if (isRefresh) {
                 mState?.mRefreshController.finishRefresh(success: true);
               }
               resultData(result, taskId);
@@ -94,10 +94,10 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
         onSuccess: onSuccess ??
             (result, taskId) {
               mState?.mQuestStatus = QuestStatus.ok;
-              if (_isLoadMore) {
+              if (isLoadMore) {
                 mState?.mRefreshController.finishLoad(success: true);
               }
-              if (_isRefresh) {
+              if (isRefresh) {
                 mState?.mRefreshController.finishRefresh(success: true);
               }
               resultData(result, taskId);
@@ -118,34 +118,34 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   /*处理请求失败*/
   failedHandle(dynamic code, dynamic msg, int taskId) {
     mState?.mQuestStatus = QuestStatus.failed;
-    if (_isLoadMore) {
+    if (isLoadMore) {
       mState?.mRefreshController.finishLoad(success: false);
     }
-    if (_isRefresh) {
+    if (isRefresh) {
       mState?.mRefreshController.finishRefresh(success: false);
     }
-    if (_isLoadMore) {
+    if (isLoadMore) {
       mPage--;
     }
-    _isLoadMore = false;
-    _isRefresh = false;
+    isLoadMore = false;
+    isRefresh = false;
     update([taskId]);
   }
 
   /*处理请求错误*/
   errorHandle(dynamic error) {
-    if (_isLoadMore) {
+    if (isLoadMore) {
       mPage--;
     }
     mState?.mQuestStatus = QuestStatus.error;
-    if (_isLoadMore) {
+    if (isLoadMore) {
       mState?.mRefreshController.finishLoad(success: false);
     }
-    if (_isRefresh) {
+    if (isRefresh) {
       mState?.mRefreshController.finishRefresh(success: false);
     }
-    _isLoadMore = false;
-    _isRefresh = false;
+    isLoadMore = false;
+    isRefresh = false;
     update();
   }
 
