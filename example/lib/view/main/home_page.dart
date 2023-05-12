@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:example/constant/api_config.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +15,13 @@ class HomeState extends TbBaseState {
 
 class HomeLogic extends TbBaseLogic<HomeState> {
 
-  getData() {
-    post(Api.getCarList, data: {
-      "licensePlate": "",
-      "size": "10",
-      "current": mPage,
-    });
+  getData() async{
+    // post(Api.getCarList, data: {
+    //   "licensePlate": "",
+    //   "size": "10",
+    //   "current": mPage,
+    // });
+
   }
 
   @override
@@ -28,9 +30,26 @@ class HomeLogic extends TbBaseLogic<HomeState> {
   }
 
   @override
-  void tbRefreshQuest() {
+  void tbRefreshQuest() async{
     super.tbRefreshQuest();
     getData();
+
+    // var image = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality:30);
+    // if (image != null) {
+    //   var _random = Random();
+    //   var _availableChars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    //   var filename = List.generate(20, (index) => _availableChars[_random.nextInt(_availableChars.length)]).join();
+    //   final formData = FormData.fromMap({
+    //     'file': await MultipartFile.fromFile(image.path, filename: filename)
+    //   });
+    //
+    //   post(Api.upLoadImage,data: formData,onError: (error) =>{
+    //     log("error--->${error}")
+    //   },onSuccess: (re,ss){
+    //     log("onSuccess--->${re}");
+    //   });
+    //
+    // }
   }
 }
 

@@ -11,4 +11,9 @@ class Api {
   static const idCardAnalysis = {1: "$baseUrl/relate/query/idCard"};
 
   static const getCarList = {1: "$baseUrl/car/getCarListApi"};
+
+
+
+  /*图片上传*/
+  static const upLoadImage = {6: "$baseUrl/attachment/uploadFile"};
 }

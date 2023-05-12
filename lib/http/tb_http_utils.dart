@@ -61,7 +61,11 @@ class TbHttpUtils {
           onRequest: (options, handler) {
             if (kDebugMode) {
               //debug模式允许打印
-              log("realUrl-->${options.baseUrl + options.path}\nqueryParameters-->${jsonEncode(options.queryParameters)}\nformData-->${jsonEncode(options.data)}\nheader-->${options.headers}");
+              if(options.data.runtimeType.toString()=="FormData"){
+                log("realUrl-->${options.baseUrl + options.path}\nqueryParameters-->${jsonEncode(options.queryParameters)}\nformData-->${options.data}\nheader-->${options.headers}");
+              }else{
+                log("realUrl-->${options.baseUrl + options.path}\nqueryParameters-->${jsonEncode(options.queryParameters)}\nformData-->${jsonEncode(options.data)}\nheader-->${options.headers}");
+              }
             }
             return handler.next(options);
           },
