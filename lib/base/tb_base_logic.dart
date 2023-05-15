@@ -48,14 +48,14 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
         onSuccess: onSuccess ??
             (result, taskId) {
               mState?.mQuestStatus = QuestStatus.ok;
+              resultData(result, taskId);
+              update();
               if (isLoadMore) {
                 mState?.mRefreshController.finishLoad(success: true);
               }
               if (isRefresh) {
                 mState?.mRefreshController.finishRefresh(success: true);
               }
-              resultData(result, taskId);
-              update();
             },
         onFiled: onFiled ?? failedHandle,
         onError: onError ?? errorHandle,
@@ -71,14 +71,14 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
         onSuccess: onSuccess ??
             (result, taskId) {
               mState?.mQuestStatus = QuestStatus.ok;
+              resultData(result, taskId);
+              update();
               if (isLoadMore) {
                 mState?.mRefreshController.finishLoad(success: true);
               }
               if (isRefresh) {
                 mState?.mRefreshController.finishRefresh(success: true);
               }
-              resultData(result, taskId);
-              update();
             },
         onFiled: onFiled ?? failedHandle,
         onError: onError ?? errorHandle,
@@ -94,17 +94,17 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
         onSuccess: onSuccess ??
             (result, taskId) {
               mState?.mQuestStatus = QuestStatus.ok;
-              if (isLoadMore) {
-                mState?.mRefreshController.finishLoad(success: true);
-              }
-              if (isRefresh) {
-                mState?.mRefreshController.finishRefresh(success: true);
-              }
               resultData(result, taskId);
               if (updateAll) {
                 update();
               } else {
                 update([taskId]);
+              }
+              if (isLoadMore) {
+                mState?.mRefreshController.finishLoad(success: true);
+              }
+              if (isRefresh) {
+                mState?.mRefreshController.finishRefresh(success: true);
               }
             },
         onFiled: onFiled ?? failedHandle,
