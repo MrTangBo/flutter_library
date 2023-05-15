@@ -119,17 +119,17 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
   failedHandle(dynamic code, dynamic msg, int taskId) {
     mState?.mQuestStatus = QuestStatus.failed;
     if (isLoadMore) {
-      mState?.mRefreshController.finishLoad(success: false);
-    }
-    if (isRefresh) {
-      mState?.mRefreshController.finishRefresh(success: false);
-    }
-    if (isLoadMore) {
       mPage--;
     }
     isLoadMore = false;
     isRefresh = false;
     update([taskId]);
+    if (isLoadMore) {
+      mState?.mRefreshController.finishLoad(success: false);
+    }
+    if (isRefresh) {
+      mState?.mRefreshController.finishRefresh(success: false);
+    }
   }
 
   /*处理请求错误*/
@@ -138,15 +138,15 @@ abstract class TbBaseLogic<T extends TbBaseState> extends GetxController {
       mPage--;
     }
     mState?.mQuestStatus = QuestStatus.error;
+    isLoadMore = false;
+    isRefresh = false;
+    update();
     if (isLoadMore) {
       mState?.mRefreshController.finishLoad(success: false);
     }
     if (isRefresh) {
       mState?.mRefreshController.finishRefresh(success: false);
     }
-    isLoadMore = false;
-    isRefresh = false;
-    update();
   }
 
   void onBackHome() {}
